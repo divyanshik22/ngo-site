@@ -1,25 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomePage from "./components/HomePage";
+import HelpNeeded from "./components/Helpneeded";
+import Contactus from "./components/Contactus";
+import Feedback from "./components/Feedback";
+import Ngonear from "./components/Ngonear";
+import Donate from "./components/Donate";
 
-function App() {
+const App = () => {
+  const [token, setToken] = useState(false);
+
+  const handleToken = (newToken) => {
+    setToken(newToken);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={<HomePage token={token} handleToken={handleToken} />}
+        />
+        <Route
+          path="/helpNeeded"
+          element={<HelpNeeded token={token} handleToken={handleToken} />}
+        />
+        <Route
+          path="/contactus"
+          element={<Contactus token={token} handleToken={handleToken} />}
+        />
+        <Route
+          path="/feedback"
+          element={<Feedback token={token} handleToken={handleToken} />}
+        />
+        <Route
+          path="/ngonearby"
+          element={<Ngonear token={token} handleToken={handleToken} />}
+        />
+        <Route
+          path="/donate"
+          element={<Donate token={token} handleToken={handleToken} />}
+        />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
