@@ -18,3 +18,61 @@
 .custom-carousel .carousel-control-next {
   right: -60px; /* Push the right arrow further to the side */
 }
+.leaflet-container {
+  width: 100%;
+  height: 100vh; /* Adjust height as needed */
+}
+
+.feedback-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.feedback-list li {
+  background: #f9f9f9;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.custom-carousel .carousel-item {
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.feedback-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.feedback-list li {
+  margin-bottom: 10px;
+}
+
+h3 {
+  margin-bottom: 20px;
+}
+.carousel-indicators {
+  position: relative;
+  justify-content: center; /* Center the indicators */
+}
+
+.carousel-indicators button {
+  background-color: #093358; /* Default color for inactive indicators */
+}
+
+.carousel-indicators .active {
+  background-color: #007bff; /* Color for active indicator */
+}
+
+.card {
+  margin: 10px 0; /* Add margin to cards */
+}
+
+.custom-carousel {
+  margin-bottom: 20px; /* Add spacing below the carousel */
+}

@@ -2,9 +2,12 @@ const Footer = () => {
   return (
     <div
       class="container-fluid"
-      style={{ backgroundColor: "#dac6ab", color: "white" }}
+      style={{
+        backgroundColor: "#dac6ab",
+        color: "white",
+      }}
     >
-      <footer class="py-3 my-4">
+      <footer class="py-3">
         <ul class="nav justify-content-center border-bottom pb-3 mb-3">
           <li class="nav-item">
             <a href="#" class="nav-link px-2 text-body-secondary">

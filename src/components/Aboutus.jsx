@@ -2,7 +2,12 @@ const Aboutus = () => {
   return (
     <div
       class="container-fluid"
-      style={{ backgroundColor: "#A0C5D7", color: "white" }}
+      style={{
+        backgroundColor: "#A0C5D7",
+        color: "white",
+        marginBottom: "0",
+        paddingBottom: "0",
+      }}
     >
       <footer class="py-5">
         <div>About Us</div>
