@@ -9,7 +9,7 @@ import "./Homepage.css";
 import "leaflet/dist/leaflet.css";
 import { Icon } from "leaflet";
 
-const HomePage = ({ token, handleToken }) => {
+const HomePage = ({ token, userType, handleToken, handleUser }) => {
   const customIcon = new Icon({
     iconUrl: require("../images/pin-map.png"),
     iconSize: [38, 38],
@@ -103,7 +103,7 @@ const HomePage = ({ token, handleToken }) => {
 
   return (
     <>
-      <Navbar token={token} handleToken={handleToken} />
+      <Navbar token={token} handleToken={handleToken} handleUser={handleUser} />
       <img
         src={Animal}
         alt="Logo"

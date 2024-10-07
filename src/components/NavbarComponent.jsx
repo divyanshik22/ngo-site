@@ -8,7 +8,7 @@ import Login from "./Login";
 import Signup from "./Signup";
 import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 
-const NavbarComponent = ({ token, handleToken }) => {
+const NavbarComponent = ({ token, handleToken, handleUser }) => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const navigate = useNavigate(); // Initialize navigate
@@ -86,6 +86,7 @@ const NavbarComponent = ({ token, handleToken }) => {
           show={showLogin}
           handleClose={handleClose}
           handleToken={handleToken}
+          handleUser={handleUser}
         />
       )}
       {showSignup && <Signup show={showSignup} handleClose={handleClose} />}

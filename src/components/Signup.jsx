@@ -26,7 +26,6 @@ const Signup = ({ show, handleClose }) => {
       location: "",
     };
 
-    // Validate username
     if (!username) {
       newErrors.username = "Username is required";
       formIsValid = false;

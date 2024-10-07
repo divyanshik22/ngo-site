@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
-import Dashboard from "./Admin/Dashboard";
 
-const Login = ({ show, handleClose, handleToken }) => {
+const Login = ({ show, handleClose, handleToken, handleUser }) => {
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({
@@ -40,10 +39,15 @@ const Login = ({ show, handleClose, handleToken }) => {
     if (formIsValid) {
       handleToken(true);
       handleClose();
-
-      if (emailOrPhone === "Admin@gmail.com" && password === "123456") {
-        console.log("I am in");
-        setDashboard(true);
+      if (
+        emailOrPhone.toLowerCase().includes("admin") &&
+        password === "123456"
+      ) {
+        handleUser("admin-token");
+      } else if (emailOrPhone.toLowerCase().includes("volunteer")) {
+        handleUser("volunteer-token");
+      } else {
+        handleUser("user-token");
       }
     } else {
       setErrors(newErrors);
