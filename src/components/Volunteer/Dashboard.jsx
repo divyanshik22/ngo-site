@@ -1,8 +1,7 @@
 import React from "react";
-import { Carousel, Card, Row, Col, Container } from "react-bootstrap";
 import Navbar from "../NavbarComponent";
 import Footer from "../Footer";
-import Aboutus from "../Aboutus";
+import Aboutus from ".././Aboutus";
 import Animal from "../../images/Animal";
 
 const Dashboard = ({ token, userType, handleToken, handleUser }) => {

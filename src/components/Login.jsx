@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "./Redux/userSlice";
 
-const Login = ({ show, handleClose, handleToken, handleUser }) => {
+const Login = ({ show, handleClose, handleToken, handleUser, Username }) => {
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({
@@ -9,6 +11,10 @@ const Login = ({ show, handleClose, handleToken, handleUser }) => {
     password: "",
   });
   const [dashboard, setDashboard] = useState(false);
+  const [username, setUsername] = useState("");
+
+  const dispatch = useDispatch();
+  const { isAuthenticated, error, user } = useSelector((state) => state.user);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,6 +43,8 @@ const Login = ({ show, handleClose, handleToken, handleUser }) => {
     }
 
     if (formIsValid) {
+      dispatch(login({ emailOrPhone, password }));
+      console.log(dispatch(login({ emailOrPhone, password })));
       handleToken(true);
       handleClose();
       if (
@@ -53,6 +61,12 @@ const Login = ({ show, handleClose, handleToken, handleUser }) => {
       setErrors(newErrors);
     }
   };
+
+  if (isAuthenticated) {
+    console.log("isAUTH");
+    handleClose();
+    handleToken(true);
+  }
 
   return (
     <Modal show={show} onHide={handleClose} centered>
