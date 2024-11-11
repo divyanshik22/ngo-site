@@ -8,6 +8,7 @@ import Feedback from "./components/Feedback";
 import Ngonear from "./components/Ngonear";
 import Donate from "./components/Donate";
 import Dashboard from "./components/Admin/Dashboard";
+import FeedBackRecived from "./components/Admin/FeedBackRecived";
 import DashboardVolunteer from "./components/Volunteer/Dashboard";
 
 const App = () => {
@@ -73,6 +74,10 @@ const App = () => {
         <Route
           path="/feedback"
           element={<Feedback token={token} handleToken={handleToken} />}
+        />
+        <Route
+          path="/feedbackrequired"
+          element={<FeedBackRecived token={token} handleToken={handleToken} />}
         />
         <Route
           path="/ngonearby"

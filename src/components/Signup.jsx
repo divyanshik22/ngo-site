@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../firebase";
+import { setDoc, doc } from "firebase/firestore";
 
 const Signup = ({ show, handleClose }) => {
   const [username, setUsername] = useState("");
@@ -15,8 +18,9 @@ const Signup = ({ show, handleClose }) => {
     location: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     let formIsValid = true;
     let newErrors = {
       username: "",
@@ -67,6 +71,22 @@ const Signup = ({ show, handleClose }) => {
     if (formIsValid) {
       // Handle successful form submission
       console.log("Form submitted successfully");
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        const user = auth.currentUser;
+        console.log(user);
+        if (user) {
+          await setDoc(doc(db, "Users", user.uid), {
+            email: user.email,
+            username: username,
+            phone: phone,
+            location: location,
+          });
+        }
+        console.log("User Registered Successfully!!");
+      } catch (error) {
+        console.log(error.message);
+      }
       handleClose();
     } else {
       setErrors(newErrors);

@@ -2,37 +2,31 @@ import React, { useState } from "react";
 import Navbar from "./NavbarComponent";
 import LogIn from "./Login";
 import { Modal, Form, Button, Row, Col, Container } from "react-bootstrap";
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
-
-const containerStyle = {
-  width: "400px",
-  height: "400px",
-};
-
-const center = {
-  lat: -3.745,
-  lng: -38.523,
-};
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "./Homepage.css";
+import "leaflet/dist/leaflet.css";
+import { Icon } from "leaflet";
 const Ngonear = ({ token, handleToken }) => {
   const [showSignup, setShowSignup] = useState(false);
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: "YOUR_API_KEY",
+  const customIcon = new Icon({
+    iconUrl: require("../images/pin-map.png"),
+    iconSize: [38, 38],
   });
 
-  const [map, setMap] = React.useState(null);
-
-  const onLoad = React.useCallback(function callback(map) {
-    // This is just an example of getting and using the map instance!!! don't just blindly copy!
-    const bounds = new window.google.maps.LatLngBounds(center);
-    map.fitBounds(bounds);
-
-    setMap(map);
-  }, []);
-
-  const onUnmount = React.useCallback(function callback(map) {
-    setMap(null);
-  }, []);
+  const markers = [
+    {
+      geocode: [23.393607, 76.132492],
+      popUp: "Hello, I am pop up 1",
+    },
+    {
+      geocode: [25.291267, 81.864672],
+      popUp: "Hello, I am pop up 2",
+    },
+    {
+      geocode: [23.215652, 83.996074],
+      popUp: "Hello, I am pop up 3",
+    },
+  ];
 
   const handleClose = () => {
     setShowSignup(false);
@@ -46,16 +40,21 @@ const Ngonear = ({ token, handleToken }) => {
     <>
       {showSignup && <LogIn show={showSignup} handleClose={handleClose} />}
       <Navbar token={token} handleToken={handleToken} />
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={center}
-        zoom={10}
-        onLoad={onLoad}
-        onUnmount={onUnmount}
+      <MapContainer
+        center={[20.5937, 78.9629]}
+        zoom={5}
+        style={{ height: "500px", width: "100%" }}
       >
-        {/* Child components, such as markers, info windows, etc. */}
-        <></>
-      </GoogleMap>
+        <TileLayer
+          url="https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg"
+          maxZoom={20}
+        />
+        {markers.map((marker, index) => (
+          <Marker key={index} position={marker.geocode} icon={customIcon}>
+            <Popup>{marker.popUp}</Popup>
+          </Marker>
+        ))}
+      </MapContainer>
     </>
   );
 };

@@ -2,21 +2,29 @@ import React, { useState, useEffect } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "./Redux/userSlice";
-
-const Login = ({ show, handleClose, handleToken, handleUser, Username }) => {
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
+const Login = ({
+  show,
+  handleClose,
+  handleToken,
+  handleUser,
+  userLoggedIn,
+}) => {
   const [emailOrPhone, setEmailOrPhone] = useState("");
+  const [userLogged, setUserLogged] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({
     emailOrPhone: "",
     password: "",
   });
-  const [dashboard, setDashboard] = useState(false);
-  const [username, setUsername] = useState("");
 
   const dispatch = useDispatch();
-  const { isAuthenticated, error, user } = useSelector((state) => state.user);
+  const { isAuthenticated, error, currentUser } = useSelector(
+    (state) => state.user
+  );
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let formIsValid = true;
     let newErrors = { emailOrPhone: "", password: "" };
@@ -44,29 +52,44 @@ const Login = ({ show, handleClose, handleToken, handleUser, Username }) => {
 
     if (formIsValid) {
       dispatch(login({ emailOrPhone, password }));
-      console.log(dispatch(login({ emailOrPhone, password })));
-      handleToken(true);
-      handleClose();
-      if (
-        emailOrPhone.toLowerCase().includes("admin") &&
-        password === "123456"
-      ) {
-        handleUser("admin-token");
-      } else if (emailOrPhone.toLowerCase().includes("volunteer")) {
-        handleUser("volunteer-token");
-      } else {
-        handleUser("user-token");
+      try {
+        await signInWithEmailAndPassword(auth, emailOrPhone, password);
+        console.log("User logged in Successfully");
+      } catch (error) {
+        console.log(error.message);
       }
     } else {
       setErrors(newErrors);
     }
   };
 
-  if (isAuthenticated) {
-    console.log("isAUTH");
-    handleClose();
-    handleToken(true);
-  }
+  // Monitor authentication state changes with useEffect
+  useEffect(() => {
+    if (isAuthenticated && currentUser) {
+      console.log("Authenticated User:", currentUser.username); // Logs username
+      handleToken(true);
+      handleClose();
+      setUserLogged(currentUser.username);
+      userLoggedIn(currentUser.username);
+      console.log(userLoggedIn);
+
+      if (currentUser.email.toLowerCase().includes("admin")) {
+        handleUser("admin-token");
+      } else if (currentUser.email.toLowerCase().includes("volunteer")) {
+        handleUser("volunteer-token");
+      } else {
+        handleUser("user-token");
+      }
+    }
+  }, [
+    isAuthenticated,
+    currentUser,
+    handleToken,
+    handleClose,
+    handleUser,
+    setUserLogged,
+    userLoggedIn,
+  ]);
 
   return (
     <Modal show={show} onHide={handleClose} centered>
@@ -101,6 +124,7 @@ const Login = ({ show, handleClose, handleToken, handleUser, Username }) => {
               {errors.password}
             </Form.Control.Feedback>
           </Form.Group>
+          {error && <div className="text-danger mb-3">{error}</div>}
           <div className="text-center">
             <Button variant="info" type="submit">
               Sign In

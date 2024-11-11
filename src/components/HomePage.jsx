@@ -1,7 +1,6 @@
 import React from "react";
 import { Carousel, Card, Row, Col, Container } from "react-bootstrap";
 import Navbar from "./NavbarComponent";
-import Footer from "./Footer";
 import Aboutus from "./Aboutus";
 import Animal from "../images/Animal";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
@@ -111,8 +110,8 @@ const HomePage = ({ token, userType, handleToken, handleUser }) => {
         className="d-inline-block align-top"
       />
       <Container style={{ padding: "20px", textAlign: "center" }}>
-        <h2>Why Should You Help Us</h2>
-        <p>
+        <h2 style={{ color: "#DC5705" }}>Why Should You Help Us</h2>
+        <p style={{ color: "#0f6465", fontWeight: "bold", fontSize: "1.5rem" }}>
           Your support can make a difference in the lives of those who need it
           the most. Whether it's providing shelter for animals or aiding people
           in crisis, every contribution counts. By helping us, you become a part
@@ -133,8 +132,11 @@ const HomePage = ({ token, userType, handleToken, handleUser }) => {
 
       <Container style={{ padding: "20px" }}>
         <Row>
-          <Col md={8}>
-            <h3 className="text-center" style={{ marginBottom: "20px" }}>
+          <Col md={16}>
+            <h3
+              className="text-center"
+              style={{ marginBottom: "20px", color: "#DC5705" }}
+            >
               Nearby NGOs
             </h3>
             <MapContainer
@@ -153,36 +155,10 @@ const HomePage = ({ token, userType, handleToken, handleUser }) => {
               ))}
             </MapContainer>
           </Col>
-          <Col md={4}>
-            <h3>Feedback from Our Supporters</h3>
-            <Carousel indicators={true} interval={4000}>
-              {groupedFeedback.map((group, index) => (
-                <Carousel.Item key={index}>
-                  <Row>
-                    {group.map((feedback, idx) => (
-                      <Col key={idx} md={12} className="mb-3">
-                        {" "}
-                        {/* Stacked cards */}
-                        <Card style={{ margin: "0 auto", width: "100%" }}>
-                          <Card.Body>
-                            <Card.Text>"{feedback.text}"</Card.Text>
-                            <Card.Subtitle className="text-muted">
-                              - {feedback.author}
-                            </Card.Subtitle>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                    ))}
-                  </Row>
-                </Carousel.Item>
-              ))}
-            </Carousel>
-          </Col>
         </Row>
       </Container>
 
       <Aboutus />
-      <Footer />
     </>
   );
 };

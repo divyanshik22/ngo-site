@@ -1,9 +1,10 @@
+import "./Aboutus.css";
 const Aboutus = () => {
   return (
     <div
       class="container-fluid"
       style={{
-        backgroundColor: "#A0C5D7",
+        backgroundColor: "#0F6465",
         color: "white",
         marginBottom: "0",
         paddingBottom: "0",
@@ -16,7 +17,14 @@ const Aboutus = () => {
             <h5>Section</h5>
             <ul class="nav flex-column">
               <li class="nav-item mb-2">
-                <a class="nav-link p-0 text-body-secondary">Home</a>
+                <a
+                  class="nav-link p-0 text-body-secondary"
+                  style={{
+                    color: "white",
+                  }}
+                >
+                  Home
+                </a>
               </li>
               <li class="nav-item mb-2">
                 <a class="nav-link p-0 text-body-secondary">Features</a>

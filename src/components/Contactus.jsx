@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import Navbar from "./NavbarComponent";
 import LogIn from "./Login";
 import { Modal, Form, Button, Row, Col, Container } from "react-bootstrap";
+import { db } from "../firebase";
+import { addDoc, collection } from "firebase/firestore";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Contactus = ({ token, handleToken }) => {
   const [showSignup, setShowSignup] = useState(false);
@@ -26,7 +30,7 @@ const Contactus = ({ token, handleToken }) => {
     setShowSignup(true);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let formIsValid = true;
     let newErrors = { name: "", email: "", phone: "", message: "" };
@@ -62,13 +66,26 @@ const Contactus = ({ token, handleToken }) => {
     }
 
     if (formIsValid) {
-      console.log("Form submitted successfully", {
-        name,
-        email,
-        phone,
-        message,
+      toast.success("Thank you for contacting us", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "light",
       });
-      // Form submission logic (e.g., send to backend)
+      setName("");
+      setEmail("");
+      setPhone("");
+      setMessage("");
+
+      await addDoc(collection(db, "ContactUs"), {
+        name: name,
+        email: email,
+        phone: phone,
+        message: message,
+      });
     } else {
       setErrors(newErrors);
     }
@@ -148,6 +165,7 @@ const Contactus = ({ token, handleToken }) => {
           </Col>
         </Row>
       </Container>
+      <ToastContainer />
     </>
   );
 };

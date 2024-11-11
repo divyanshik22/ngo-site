@@ -1,6 +1,5 @@
 import React from "react";
 import Navbar from "../NavbarComponent";
-import Footer from "../Footer";
 import Aboutus from ".././Aboutus";
 import Animal from "../../images/Animal";
 
@@ -15,7 +14,6 @@ const Dashboard = ({ token, userType, handleToken, handleUser }) => {
         className="d-inline-block align-top"
       />
       <Aboutus />
-      <Footer />
     </>
   );
 };

@@ -1,12 +1,12 @@
 .custom-carousel .carousel-control-prev,
 .custom-carousel .carousel-control-next {
-  color: #dac6ab;
+  color: #dc5705;
   width: 5%; /* Make the arrow area bigger to push it further from the cards */
 }
 
 .custom-carousel .carousel-control-prev-icon,
 .custom-carousel .carousel-control-next-icon {
-  background-color: #dac6ab; /* Change arrow color */
+  background-color: #dc5705; /* Change arrow color */
   width: 50px;
   height: 50px;
 }
@@ -24,12 +24,13 @@
 }
 
 .feedback-list {
+  background: #dc5705;
+  color: white;
   list-style-type: none;
   padding: 0;
 }
 
 .feedback-list li {
-  background: #f9f9f9;
   margin: 10px 0;
   padding: 10px;
   border-radius: 5px;
@@ -43,7 +44,14 @@ body {
 .custom-carousel .carousel-item {
   transition: transform 0.5s ease, opacity 0.5s ease;
 }
+.custom-carousel .carousel-item .row .card {
+  background-color: #dc5705;
+  color: white; /* Set background color for each carousel item */
+}
 
+.custom-carousel .carousel-item .carousel-caption {
+  color: white; /* Ensure text in the caption is white */
+}
 .feedback-list {
   list-style-type: none;
   padding: 0;
@@ -70,6 +78,8 @@ h3 {
 }
 
 .card {
+  background: #dc5705;
+  color: white;
   margin: 10px 0; /* Add margin to cards */
 }
 

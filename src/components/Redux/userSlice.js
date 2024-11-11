@@ -1,9 +1,11 @@
+// userSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 import userDetails from "./userdetails"; // Importing user details
 
 const initialState = {
   isAuthenticated: false,
   currentUser: null,
+  error: null,
 };
 
 const userSlice = createSlice({
@@ -20,15 +22,17 @@ const userSlice = createSlice({
 
       if (user) {
         state.isAuthenticated = true;
-        state.currentUser = user;
+        state.currentUser = user; // Save the full user object, including username
       } else {
         state.isAuthenticated = false;
         state.currentUser = null;
+        state.error = "Invalid email/phone or password";
       }
     },
     logout(state) {
       state.isAuthenticated = false;
       state.currentUser = null;
+      state.error = null;
     },
   },
 });

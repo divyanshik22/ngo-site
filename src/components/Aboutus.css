@@ -1,0 +1,48 @@
+/* Container styling */
+.container-fluid {
+  background-color: #0f6465;
+  color: white;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* Footer styling */
+.footer {
+  padding-top: 3rem;
+}
+
+/* Title styling */
+.footer h5 {
+  color: white;
+}
+
+/* Paragraph text in footer */
+.footer p {
+  color: white;
+}
+
+/* Link styling */
+.container-fluid .nav-link {
+  color: white !important;
+  padding: 0;
+}
+
+.container-fluid .nav-link:hover {
+  color: #ddd !important; /* Optional: lighter shade on hover */
+}
+
+/* Subscription input and button styling */
+.d-flex input[type="text"] {
+  color: black;
+}
+
+.d-flex .btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: white;
+}
+
+.d-flex .btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}

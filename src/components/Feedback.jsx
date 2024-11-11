@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "./NavbarComponent";
 import LogIn from "./Login";
 import { Modal, Form, Button, Row, Col, Container } from "react-bootstrap";
-import { FaStar } from "react-icons/fa"; // Install react-icons if you haven't already: npm install react-icons
+import { FaStar } from "react-icons/fa"; // Install react-icons : npm install react-icons
+import { db } from "../firebase";
+import { addDoc, collection } from "firebase/firestore";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Feedback = ({ token, handleToken }) => {
   const [showSignup, setShowSignup] = useState(false);
@@ -18,6 +22,7 @@ const Feedback = ({ token, handleToken }) => {
     rating: "",
     feedback: "",
   });
+  const [userDetails, setUserDetails] = useState(null);
 
   const handleClose = () => {
     setShowSignup(false);
@@ -74,7 +79,7 @@ const Feedback = ({ token, handleToken }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const isNameValid = validateName();
@@ -83,11 +88,24 @@ const Feedback = ({ token, handleToken }) => {
     const isFeedbackValid = validateFeedback();
 
     if (isNameValid && isEmailValid && isRatingValid && isFeedbackValid) {
-      console.log("Feedback submitted successfully", {
-        name,
-        email,
-        rating,
-        feedback,
+      toast.success("Thank you for the feedback", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "light",
+      });
+      setName("");
+      setEmail("");
+      setRating("");
+      setFeedback("");
+      await addDoc(collection(db, "Feedback"), {
+        name: name,
+        email: email,
+        rating: rating,
+        feedback: feedback,
       });
       // Implement form submission logic here
     }
@@ -174,6 +192,7 @@ const Feedback = ({ token, handleToken }) => {
           </Col>
         </Row>
       </Container>
+      <ToastContainer />
     </>
   );
 };
