@@ -1,29 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../../images/Logoo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
+import Dropdown from "react-bootstrap/Dropdown";
 import Login from "../Login";
 import Signup from "../Signup";
 import "./navbaradmin.css";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 
-const NavbarAdmin = ({ token, handleToken, handleUser }) => {
+const NavbarAdmin = ({ token, handleToken, username, handleLogout }) => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
-  const [username, setUsername] = useState("");
 
-  const navigate = useNavigate(); // Initialize navigate
-  const userLoggedIn = (name) => {
-    console.log("Innnnnn");
-    setUsername(name);
+  const navigate = useNavigate();
+
+  const handleLogoutBtn = () => {
+    handleToken(false); // Clear token
+    handleLogout();
   };
 
-  const handleProfile = () => {
-    handleToken(false);
-    // navigate("/"); // Uncomment to navigate to homepage
-  };
   const handleClose = () => {
     setShowLogin(false);
     setShowSignup(false);
@@ -78,9 +74,19 @@ const NavbarAdmin = ({ token, handleToken, handleUser }) => {
           </Nav>
           <Nav>
             {token ? (
-              <Button onClick={handleProfile} className="btn-custom">
-                {username}
-              </Button>
+              <Dropdown>
+                <Dropdown.Toggle className="btn-custom">
+                  {username}
+                </Dropdown.Toggle>
+                <Dropdown.Menu align="end">
+                  <Dropdown.Item as={Link} to="/profile">
+                    Profile
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={handleLogoutBtn}>
+                    Logout
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             ) : (
               <>
                 <Button
@@ -88,7 +94,7 @@ const NavbarAdmin = ({ token, handleToken, handleUser }) => {
                   onClick={Loginbtn}
                   className="btn-custom me-1"
                 >
-                  SignIn
+                  Sign In
                 </Button>
                 <Button
                   variant="info"
@@ -107,8 +113,6 @@ const NavbarAdmin = ({ token, handleToken, handleUser }) => {
           show={showLogin}
           handleClose={handleClose}
           handleToken={handleToken}
-          handleUser={handleUser}
-          userLoggedIn={userLoggedIn}
         />
       )}
       {showSignup && <Signup show={showSignup} handleClose={handleClose} />}

@@ -1,29 +1,25 @@
 import React, { useState } from "react";
 import logo from "../images/Logoo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
+import Dropdown from "react-bootstrap/Dropdown";
 import Login from "./Login";
 import Signup from "./Signup";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 import "./navbar.css";
 
-const NavbarComponent = ({ token, handleToken, handleUser }) => {
+const NavbarComponent = ({ token, handleToken, username, handleLogout }) => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
-  const [username, setUsername] = useState("");
 
-  const navigate = useNavigate(); // Initialize navigate
-  const userLoggedIn = (name) => {
-    console.log("Innnnnn");
-    setUsername(name);
+  const navigate = useNavigate();
+
+  const handleLogoutBtn = () => {
+    handleToken(false); // Clear token
+    handleLogout();
   };
 
-  const handleProfile = () => {
-    handleToken(false);
-    // navigate("/");
-  };
   const handleClose = () => {
     setShowLogin(false);
     setShowSignup(false);
@@ -108,16 +104,25 @@ const NavbarComponent = ({ token, handleToken, handleUser }) => {
           </Nav>
           <Nav>
             {token ? (
-              <Button
-                onClick={handleProfile}
-                style={{
-                  backgroundColor: "white",
-                  color: "#0f6465",
-                  border: "none",
-                }}
-              >
-                {username}
-              </Button>
+              <Dropdown>
+                <Dropdown.Toggle
+                  style={{
+                    backgroundColor: "white",
+                    color: "#0f6465",
+                    border: "none",
+                  }}
+                >
+                  {username}
+                </Dropdown.Toggle>
+                <Dropdown.Menu align="end">
+                  <Dropdown.Item as={Link} to="/profile">
+                    Profile
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={handleLogoutBtn}>
+                    Logout
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             ) : (
               <>
                 <Button
@@ -130,7 +135,7 @@ const NavbarComponent = ({ token, handleToken, handleUser }) => {
                     border: "none",
                   }}
                 >
-                  SignIn
+                  Sign In
                 </Button>
                 <Button
                   variant="info"
@@ -153,8 +158,6 @@ const NavbarComponent = ({ token, handleToken, handleUser }) => {
           show={showLogin}
           handleClose={handleClose}
           handleToken={handleToken}
-          handleUser={handleUser}
-          userLoggedIn={userLoggedIn}
         />
       )}
       {showSignup && <Signup show={showSignup} handleClose={handleClose} />}

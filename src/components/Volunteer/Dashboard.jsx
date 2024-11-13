@@ -1,12 +1,25 @@
 import React from "react";
-import Navbar from "../NavbarComponent";
+import Navbar from "./NavbarVol";
 import Aboutus from ".././Aboutus";
 import Animal from "../../images/Animal";
 
-const Dashboard = ({ token, userType, handleToken, handleUser }) => {
+const Dashboard = ({
+  token,
+  userType,
+  handleToken,
+  handleUser,
+  username,
+  handleLogout,
+}) => {
   return (
     <>
-      <Navbar token={token} handleToken={handleToken} handleUser={handleUser} />
+      <Navbar
+        token={token}
+        handleToken={handleToken}
+        handleUser={handleUser}
+        username={username}
+        handleLogout={handleLogout}
+      />
       <img
         src={Animal}
         alt="Logo"

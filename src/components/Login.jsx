@@ -4,13 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "./Redux/userSlice";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
-const Login = ({
-  show,
-  handleClose,
-  handleToken,
-  handleUser,
-  userLoggedIn,
-}) => {
+const Login = ({ show, handleClose, handleToken, userLoggedIn }) => {
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [userLogged, setUserLogged] = useState("");
   const [password, setPassword] = useState("");
@@ -52,6 +46,8 @@ const Login = ({
 
     if (formIsValid) {
       dispatch(login({ emailOrPhone, password }));
+      handleToken(true);
+      handleClose();
       try {
         await signInWithEmailAndPassword(auth, emailOrPhone, password);
         console.log("User logged in Successfully");
@@ -62,34 +58,6 @@ const Login = ({
       setErrors(newErrors);
     }
   };
-
-  // Monitor authentication state changes with useEffect
-  useEffect(() => {
-    if (isAuthenticated && currentUser) {
-      console.log("Authenticated User:", currentUser.username); // Logs username
-      handleToken(true);
-      handleClose();
-      setUserLogged(currentUser.username);
-      userLoggedIn(currentUser.username);
-      console.log(userLoggedIn);
-
-      if (currentUser.email.toLowerCase().includes("admin")) {
-        handleUser("admin-token");
-      } else if (currentUser.email.toLowerCase().includes("volunteer")) {
-        handleUser("volunteer-token");
-      } else {
-        handleUser("user-token");
-      }
-    }
-  }, [
-    isAuthenticated,
-    currentUser,
-    handleToken,
-    handleClose,
-    handleUser,
-    setUserLogged,
-    userLoggedIn,
-  ]);
 
   return (
     <Modal show={show} onHide={handleClose} centered>
