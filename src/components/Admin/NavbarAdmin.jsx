@@ -55,8 +55,8 @@ const NavbarAdmin = ({ token, handleToken, username, handleLogout }) => {
             <Nav.Link as={Link} to="/helpneeded" className="nav-link ms-3">
               Help Required
             </Nav.Link>
-            <Nav.Link as={Link} to="/contactus" className="nav-link ms-3">
-              Contacted
+            <Nav.Link as={Link} to="/volunteerList" className="nav-link ms-3">
+              Volunteers
             </Nav.Link>
             <Nav.Link
               as={Link}

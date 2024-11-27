@@ -1,27 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { login } from "./Redux/userSlice";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { login } from "./Redux/userSlice";
 import { auth } from "../firebase";
-const Login = ({ show, handleClose, handleToken, userLoggedIn }) => {
+import { useDispatch, useSelector } from "react-redux";
+const Login = ({ show, handleClose, handleToken }) => {
   const [emailOrPhone, setEmailOrPhone] = useState("");
-  const [userLogged, setUserLogged] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({
     emailOrPhone: "",
     password: "",
+    authError: "", // Added to show authentication error
   });
-
   const dispatch = useDispatch();
   const { isAuthenticated, error, currentUser } = useSelector(
     (state) => state.user
   );
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     let formIsValid = true;
-    let newErrors = { emailOrPhone: "", password: "" };
+    let newErrors = { emailOrPhone: "", password: "", authError: "" };
 
     // Validate email or phone
     if (!emailOrPhone) {
@@ -45,20 +43,33 @@ const Login = ({ show, handleClose, handleToken, userLoggedIn }) => {
     }
 
     if (formIsValid) {
-      dispatch(login({ emailOrPhone, password }));
-      handleToken(true);
-      handleClose();
       try {
-        await signInWithEmailAndPassword(auth, emailOrPhone, password);
-        console.log("User logged in Successfully");
+        dispatch(login({ emailOrPhone, password }));
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          emailOrPhone,
+          password
+        );
+        handleToken(true);
+        handleClose();
+        console.log("User logged in successfully");
       } catch (error) {
-        console.log(error.message);
-      }
-    } else {
-      setErrors(newErrors);
-    }
-  };
+        console.error("Error logging in:", error.message);
 
+        // Update errors with authError if login fails
+        newErrors.authError = "Username or password does not match";
+      }
+    }
+    setErrors(newErrors);
+  };
+  // useEffect(() => {
+  //   console.log(isAuthenticated, currentUser);
+  //   if (isAuthenticated && currentUser) {
+  //     console.log("in");
+  //     handleToken(true);
+  //     handleClose();
+  //   }
+  // }, [isAuthenticated, currentUser, handleToken, handleClose]);
   return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
@@ -92,7 +103,12 @@ const Login = ({ show, handleClose, handleToken, userLoggedIn }) => {
               {errors.password}
             </Form.Control.Feedback>
           </Form.Group>
-          {error && <div className="text-danger mb-3">{error}</div>}
+
+          {/* Show Firebase authentication error */}
+          {errors.authError && (
+            <div className="text-danger mb-3">{errors.authError}</div>
+          )}
+
           <div className="text-center">
             <Button variant="info" type="submit">
               Sign In

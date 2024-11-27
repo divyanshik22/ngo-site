@@ -19,6 +19,7 @@ import Profile from "./components/Volunteer/Profile";
 import ProfileAdmin from "./components/Admin/Profile";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "./components/Redux/userSlice";
+import VolunteerList from "./components/Admin/VolunteerList";
 
 const App = () => {
   const [token, setToken] = useState(false);
@@ -43,7 +44,7 @@ const App = () => {
     if (isAuthenticated && currentUser) {
       console.log("Authenticated User:", currentUser.username, userType);
       setUserName(currentUser.username);
-
+      console.log(username, userType);
       if (currentUser.email.toLowerCase().includes("admin")) {
         setUserType("admin-token");
       } else if (currentUser.email.toLowerCase().includes("volunteer")) {
@@ -52,8 +53,8 @@ const App = () => {
         setUserType("user-token");
       }
     }
-  }, [isAuthenticated, currentUser, userType, username]);
-
+  }, [isAuthenticated, currentUser, userType, username, handleToken]);
+  console.log("App", userType);
   return (
     <Router>
       <Routes>
@@ -108,6 +109,10 @@ const App = () => {
         <Route path="/donate" element={<Donate token={token} />} />
         <Route path="/profileVol" element={<Profile token={token} />} />
         <Route path="/profileAdmin" element={<ProfileAdmin token={token} />} />
+        <Route
+          path="/volunteerList"
+          element={<VolunteerList token={token} />}
+        />
       </Routes>
     </Router>
   );

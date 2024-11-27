@@ -27,8 +27,93 @@ const Helpneeded = ({ token, handleToken }) => {
     lat: 28.65,
     lng: 77.22,
   });
+  const [route, setRoute] = useState([]);
   const mapRef = useRef();
+  const findNearestVolunteer = async () => {
+    try {
+      const response = await axios.get("/api/volunteers"); // Fetch volunteers from your API
+      const volunteers = response.data;
 
+      let nearestVolunteer = null;
+      let minDistance = Infinity;
+
+      volunteers.forEach((volunteer) => {
+        const distance = calculateDistance(
+          location.lat,
+          location.lng,
+          volunteer.lat,
+          volunteer.lng
+        );
+        if (distance < minDistance) {
+          minDistance = distance;
+          nearestVolunteer = volunteer;
+        }
+      });
+
+      if (nearestVolunteer) {
+        setVolunteerLocation({
+          lat: nearestVolunteer.lat,
+          lng: nearestVolunteer.lng,
+        });
+        getRoute(location, nearestVolunteer); // Get route to nearest volunteer
+      }
+    } catch (error) {
+      console.error("Error fetching volunteers:", error);
+    }
+  };
+
+  // calculateDistance: Added to calculate distance between two points
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // Earth radius in km
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) *
+        Math.cos(lat2 * (Math.PI / 180)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c; // Distance in km
+    return distance;
+  };
+
+  // getRoute: Added to get the route from the user to the nearest volunteer using OpenRouteService API
+  const getRoute = async (userLocation, volunteerLocation) => {
+    try {
+      const response = await axios.get(
+        `https://api.openrouteservice.org/v2/directions/driving-car?api_key=YOUR_API_KEY&start=${userLocation.lng},${userLocation.lat}&end=${volunteerLocation.lng},${volunteerLocation.lat}`
+      );
+      setRoute(response.data.features[0].geometry.coordinates);
+    } catch (error) {
+      console.error("Error fetching route:", error);
+    }
+  };
+
+  // useEffect for volunteer tracking animation
+  useEffect(() => {
+    if (tracking && volunteerLocation && location) {
+      const interval = setInterval(() => {
+        setVolunteerLocation((prevLocation) => {
+          const latDiff = (location.lat - prevLocation.lat) * 0.05;
+          const lngDiff = (location.lng - prevLocation.lng) * 0.05;
+
+          if (Math.abs(latDiff) < 0.0001 && Math.abs(lngDiff) < 0.0001) {
+            clearInterval(interval);
+            setTracking(false);
+            return location;
+          }
+
+          return {
+            lat: prevLocation.lat + latDiff,
+            lng: prevLocation.lng + lngDiff,
+          };
+        });
+      }, 200);
+
+      return () => clearInterval(interval);
+    }
+  }, [tracking, volunteerLocation, location]);
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(

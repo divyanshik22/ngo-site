@@ -5,7 +5,7 @@ import Animal from "../../images/Animal";
 
 const Dashboard = ({
   token,
-  userType,
+
   handleToken,
   username,
   handleLogout,

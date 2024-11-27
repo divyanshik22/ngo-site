@@ -31,42 +31,50 @@ const Signup = ({ show, handleClose }) => {
     };
 
     if (!username) {
+      console.log("Innn ");
       newErrors.username = "Username is required";
       formIsValid = false;
     }
 
     // Validate phone number
     if (!phone) {
+      console.log("Innn ");
       newErrors.phone = "Phone number is required";
       formIsValid = false;
     } else if (!/^\d{10}$/.test(phone)) {
+      console.log("Innn ");
       newErrors.phone = "Invalid phone number (must be 10 digits)";
       formIsValid = false;
     }
 
     // Validate email
     if (!email) {
+      console.log("Innn ");
       newErrors.email = "Email is required";
       formIsValid = false;
     } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+      console.log("Innn ");
       newErrors.email = "Invalid email format";
       formIsValid = false;
     }
 
     // Validate password
     if (!password) {
+      console.log("Innn ");
       newErrors.password = "Password is required";
       formIsValid = false;
     } else if (password.length < 6) {
+      console.log("Innn ");
       newErrors.password = "Password must be at least 6 characters long";
       formIsValid = false;
     }
 
     // Validate location
-    if (!location) {
-      newErrors.location = "Location is required";
-      formIsValid = false;
-    }
+    // if (!location) {
+    //   console.log("Innn ");
+    //   newErrors.location = "Location is required";
+    //   formIsValid = false;
+    // }
 
     if (formIsValid) {
       // Handle successful form submission
@@ -78,12 +86,16 @@ const Signup = ({ show, handleClose }) => {
         if (user) {
           await setDoc(doc(db, "Users", user.uid), {
             email: user.email,
-            username: username,
-            phone: phone,
-            location: location,
+            username,
+            phone,
+            location,
+            ...(email.toLowerCase().includes("admin") ||
+            email.toLowerCase().includes("volunteer")
+              ? { active: true }
+              : {}),
           });
+          console.log("User Registered Successfully!!");
         }
-        console.log("User Registered Successfully!!");
       } catch (error) {
         console.log(error.message);
       }

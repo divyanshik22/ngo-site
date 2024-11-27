@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../../images/Logoo.png";
 import { Link, useNavigate } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
@@ -12,6 +12,7 @@ import "./navbarvol.css";
 const NavbarVol = ({ token, handleToken, username, handleLogout }) => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
+  const [userLoggedIn, setUserLoggedIn] = useState("");
 
   const navigate = useNavigate();
 
@@ -34,7 +35,10 @@ const NavbarVol = ({ token, handleToken, username, handleLogout }) => {
     setShowLogin(false);
     setShowSignup(true);
   };
-
+  useEffect(() => {
+    setUserLoggedIn(username);
+    console.log(userLoggedIn);
+  }, [username]);
   return (
     <>
       <Navbar collapseOnSelect expand="lg" className="navbar-custom">

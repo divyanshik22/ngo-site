@@ -22,6 +22,7 @@ const userSlice = createSlice({
 
       if (user) {
         state.isAuthenticated = true;
+        console.log(user);
         state.currentUser = user; // Save the full user object, including username
       } else {
         state.isAuthenticated = false;
