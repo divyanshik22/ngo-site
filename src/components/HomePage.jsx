@@ -158,7 +158,7 @@ const HomePage = ({
               style={{ height: "400px", width: "100%" }}
             >
               <TileLayer
-                url="https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg"
+                url="https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg?apikey=1bdb70dc-0053-4aee-a0e7-fa4a9097a99f"
                 maxZoom={20}
               />
               {markers.map((marker, index) => (
