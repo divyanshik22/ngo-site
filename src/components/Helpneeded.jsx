@@ -7,62 +7,29 @@ import {
   TileLayer,
   Marker,
   Popup,
-  useMapEvents,
   Polyline,
+  useMapEvents,
 } from "react-leaflet";
 import L from "leaflet";
 import axios from "axios";
 import "leaflet/dist/leaflet.css";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
 
 const Helpneeded = ({ token, handleToken }) => {
+  const [volunteers, setVolunteers] = useState([]);
   const [helpType, setHelpType] = useState("");
   const [signIn, setSignIn] = useState(true);
   const [showSignup, setShowSignup] = useState(false);
   const [location, setLocation] = useState(null);
   const [address, setAddress] = useState("");
   const [tracking, setTracking] = useState(false);
-  const [volunteerLocation, setVolunteerLocation] = useState({
-    lat: 28.65,
-    lng: 77.22,
-  });
+  const [volunteerLocation, setVolunteerLocation] = useState(null);
   const [route, setRoute] = useState([]);
   const mapRef = useRef();
-  const findNearestVolunteer = async () => {
-    try {
-      const response = await axios.get("/api/volunteers"); // Fetch volunteers from your API
-      const volunteers = response.data;
 
-      let nearestVolunteer = null;
-      let minDistance = Infinity;
-
-      volunteers.forEach((volunteer) => {
-        const distance = calculateDistance(
-          location.lat,
-          location.lng,
-          volunteer.lat,
-          volunteer.lng
-        );
-        if (distance < minDistance) {
-          minDistance = distance;
-          nearestVolunteer = volunteer;
-        }
-      });
-
-      if (nearestVolunteer) {
-        setVolunteerLocation({
-          lat: nearestVolunteer.lat,
-          lng: nearestVolunteer.lng,
-        });
-        getRoute(location, nearestVolunteer); // Get route to nearest volunteer
-      }
-    } catch (error) {
-      console.error("Error fetching volunteers:", error);
-    }
-  };
-
-  // calculateDistance: Added to calculate distance between two points
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371; // Earth radius in km
     const dLat = (lat2 - lat1) * (Math.PI / 180);
@@ -74,71 +41,50 @@ const Helpneeded = ({ token, handleToken }) => {
         Math.sin(dLon / 2) *
         Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c; // Distance in km
-    return distance;
+    return R * c; // Distance in km
   };
 
-  // getRoute: Added to get the route from the user to the nearest volunteer using OpenRouteService API
-  const getRoute = async (userLocation, volunteerLocation) => {
-    try {
-      const response = await axios.get(
-        `https://api.openrouteservice.org/v2/directions/driving-car?api_key=YOUR_API_KEY&start=${userLocation.lng},${userLocation.lat}&end=${volunteerLocation.lng},${volunteerLocation.lat}`
-      );
-      setRoute(response.data.features[0].geometry.coordinates);
-    } catch (error) {
-      console.error("Error fetching route:", error);
+  const findNearestVolunteer = () => {
+    if (!location) {
+      console.error("User location not available.");
+      return;
+    }
+
+    let nearestVolunteer = null;
+    let minDistance = Infinity;
+
+    volunteers.forEach((volunteer) => {
+      if (volunteer.lat && volunteer.lng) {
+        const distance = calculateDistance(
+          location.lat,
+          location.lng,
+          volunteer.lat,
+          volunteer.lng
+        );
+        if (distance < minDistance) {
+          minDistance = distance;
+          nearestVolunteer = volunteer;
+        }
+      }
+    });
+
+    if (nearestVolunteer && minDistance <= 300) {
+      setVolunteerLocation({
+        lat: nearestVolunteer.lat,
+        lng: nearestVolunteer.lng,
+      });
+      console.log("Tracking nearest volunteer:", nearestVolunteer);
+    } else {
+      console.log("No nearby Volunteer");
     }
   };
-
-  // useEffect for volunteer tracking animation
-  useEffect(() => {
-    if (tracking && volunteerLocation && location) {
-      const interval = setInterval(() => {
-        setVolunteerLocation((prevLocation) => {
-          const latDiff = (location.lat - prevLocation.lat) * 0.05;
-          const lngDiff = (location.lng - prevLocation.lng) * 0.05;
-
-          if (Math.abs(latDiff) < 0.0001 && Math.abs(lngDiff) < 0.0001) {
-            clearInterval(interval);
-            setTracking(false);
-            return location;
-          }
-
-          return {
-            lat: prevLocation.lat + latDiff,
-            lng: prevLocation.lng + lngDiff,
-          };
-        });
-      }, 200);
-
-      return () => clearInterval(interval);
-    }
-  }, [tracking, volunteerLocation, location]);
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          const userLocation = { lat: latitude, lng: longitude };
-          setLocation(userLocation);
-          getAddress(latitude, longitude);
-          mapRef.current?.setView(userLocation, 15);
-        },
-        (error) => {
-          console.error("Geolocation error:", error);
-        },
-        { enableHighAccuracy: true }
-      );
-    }
-  }, []);
 
   const LocationMap = () => {
-    const map = useMapEvents({
+    useMapEvents({
       click(e) {
         const { lat, lng } = e.latlng;
         setLocation({ lat, lng });
         getAddress(lat, lng);
-        map.flyTo(e.latlng, map.getZoom());
       },
     });
 
@@ -169,76 +115,55 @@ const Helpneeded = ({ token, handleToken }) => {
     shadowSize: [41, 41],
   });
 
-  const handleClose = () => {
-    setShowSignup(false);
-  };
-
-  const Signupbtn = () => {
-    setSignIn(false);
-    setShowSignup(true);
-  };
-
-  const onHide = () => {
-    setSignIn(false);
-  };
-
   const handleSubmit = () => {
     if (location) {
-      console.log("Latitude:", location.lat);
-      console.log("Longitude:", location.lng);
-      alert(`Location: ${address}`);
-      setTracking(true); // Start tracking and display the volunteer tracking map
+      findNearestVolunteer();
+      setTracking(true);
     } else {
       alert("Please select a location.");
     }
   };
 
-  // Animation effect to move volunteer marker to user's selected location
   useEffect(() => {
-    if (tracking && volunteerLocation && location) {
-      const interval = setInterval(() => {
-        setVolunteerLocation((prevLocation) => {
-          const latDiff = (location.lat - prevLocation.lat) * 0.05;
-          const lngDiff = (location.lng - prevLocation.lng) * 0.05;
+    const fetchCurrentLocation = async () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            const currentLocation = { lat: latitude, lng: longitude };
+            setLocation(currentLocation);
+            getAddress(latitude, longitude);
+          },
+          (error) => {
+            console.error("Geolocation error:", error);
+          },
+          { enableHighAccuracy: true }
+        );
+      }
+    };
 
-          if (Math.abs(latDiff) < 0.0001 && Math.abs(lngDiff) < 0.0001) {
-            clearInterval(interval);
-            setTracking(false);
-            return location;
-          }
+    fetchCurrentLocation();
 
-          return {
-            lat: prevLocation.lat + latDiff,
-            lng: prevLocation.lng + lngDiff,
-          };
-        });
-      }, 200);
+    const fetchVolunteers = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "Users"));
+        const volunteersList = querySnapshot.docs
+          .map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+          .filter((volunteer) => volunteer.lat && volunteer.lng);
+        setVolunteers(volunteersList);
+      } catch (error) {
+        console.error("Error fetching volunteers:", error);
+      }
+    };
 
-      return () => clearInterval(interval);
-    }
-  }, [tracking, volunteerLocation, location]);
+    fetchVolunteers();
+  }, []);
 
   return (
     <>
-      {!token && (
-        <Modal show={signIn} onHide={onHide} centered>
-          <Modal.Header closeButton>
-            <Modal.Title>Selected</Modal.Title>
-          </Modal.Header>
-          <Modal.Footer centered>
-            <Button variant="info" onClick={onHide}>
-              Continue without SignIn
-            </Button>
-          </Modal.Footer>
-          <Modal.Footer>
-            <Button variant="info" onClick={Signupbtn}>
-              SignIn
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      )}
-
-      {showSignup && <LogIn show={showSignup} handleClose={handleClose} />}
       <Navbar token={token} handleToken={handleToken} />
       <Container className="mt-4">
         <h2 className="text-center mb-4">Enter the Details</h2>
@@ -302,34 +227,30 @@ const Helpneeded = ({ token, handleToken }) => {
             </div>
           </Form.Group>
 
-          {helpType === "animal" && (
-            <Form.Group className="mb-3" controlId="formAnimal">
-              <Form.Label>State the Animal</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter the type of animal"
-              />
-            </Form.Group>
-          )}
-
-          {helpType === "people" && (
-            <Form.Group className="mb-3" controlId="formAge">
-              <Form.Label>Age</Form.Label>
-              <Form.Control type="number" placeholder="Enter the age" />
-            </Form.Group>
-          )}
-
           <Form.Group className="mb-3">
             <Form.Label>Select Location on Map</Form.Label>
-            <MapContainer
-              center={[28.6448, 77.2167]}
-              zoom={5}
-              style={{ height: "400px", width: "100%" }}
-              ref={mapRef}
-            >
-              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-              <LocationMap />
-            </MapContainer>
+            {location ? (
+              <MapContainer
+                center={location}
+                zoom={15} // Zoomed in closer to user's location
+                style={{ height: "400px", width: "100%" }}
+                ref={mapRef}
+              >
+                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                <LocationMap />
+              </MapContainer>
+            ) : (
+              <div
+                style={{
+                  height: "400px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <span>Loading your location...</span>
+              </div>
+            )}
             <input
               type="text"
               value={address}
@@ -339,39 +260,28 @@ const Helpneeded = ({ token, handleToken }) => {
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formPhoto">
-            <Form.Label>Photo</Form.Label>
-            <Form.Control type="file" accept="image/*" capture="environment" />
-            <Form.Text className="text-muted">
-              You can upload a photo or click a new one.
-            </Form.Text>
-          </Form.Group>
-
-          <Button variant="primary" type="button" block onClick={handleSubmit}>
+          <Button variant="primary" onClick={handleSubmit}>
             Submit
           </Button>
         </Form>
 
-        {tracking && (
+        {tracking && volunteerLocation && (
           <>
             <h3 className="text-center mt-4">Volunteer is on the Way!</h3>
             <MapContainer
-              center={volunteerLocation}
+              center={location}
               zoom={10}
               style={{ height: "400px", width: "100%" }}
             >
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-              {/* User Location */}
               <Marker position={location}>
                 <Popup>Your Location</Popup>
               </Marker>
-              {/* Volunteer Location */}
               <Marker position={volunteerLocation}>
                 <Popup>Volunteer Location</Popup>
               </Marker>
-              {/* Tracking line between user and volunteer */}
               <Polyline
-                positions={[volunteerLocation, location]}
+                positions={[location, volunteerLocation]}
                 color="blue"
                 weight={5}
               />

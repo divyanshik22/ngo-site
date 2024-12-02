@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Navbar from "./NavbarVol";
 import { db } from "../../firebase"; // Firebase import
-import { doc, updateDoc, collection, getDocs } from "firebase/firestore"; // Firebase Firestore imports
+import { doc, updateDoc, collection, getDocs } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import {
   MapContainer,
@@ -16,7 +16,7 @@ import "leaflet/dist/leaflet.css";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
-const Profile = ({ token, handleToken }) => {
+const Profile = ({ token }) => {
   const [profile, setProfile] = useState({
     id: "",
     firstName: "",
@@ -29,35 +29,38 @@ const Profile = ({ token, handleToken }) => {
     area: "",
     email: "",
     location: "",
+    lat: null, // Latitude
+    lng: null,
     country: "",
     region: "",
-    active: false, // New field for active status
+    active: false, // Active status
   });
 
   const [isEditing, setIsEditing] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [address, setAddress] = useState("");
-  const [userLocation, setUserLocation] = useState(null);
-  const email = useSelector((state) => state.user.currentUser?.email); // Get email from Redux state
+  const email = useSelector((state) => state.user.currentUser?.email); // Redux for email
+  const [showMap, setShowMap] = useState(false); // New state to control map visibility
+
   const mapRef = useRef();
+  const handleLocateMe = () => {
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        const address = await getAddressFromLatLng(latitude, longitude);
+        setSelectedLocation({ lat: latitude, lng: longitude });
+        setAddress(address);
+        setShowMap(true); // Show map after fetching location
+      },
+      (error) => console.error("Error getting location:", error),
+      { enableHighAccuracy: true }
+    );
+  };
 
   useEffect(() => {
-    // Get current location
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setUserLocation({ lat: latitude, lng: longitude });
-        },
-        (error) => {
-          console.error("Error fetching geolocation:", error);
-        }
-      );
-    }
-
-    // Fetch the volunteer profile
+    // Fetch volunteer data
     const fetchVolunteer = async () => {
-      if (!email) return; // If there's no email, stop fetching
+      if (!email) return;
 
       try {
         const querySnapshot = await getDocs(collection(db, "Users"));
@@ -66,88 +69,72 @@ const Profile = ({ token, handleToken }) => {
           ...doc.data(),
         }));
 
-        // Filter to get only the logged-in user's information
-        const loggedInUserVolunteer = volunteersList.find(
-          (vol) => vol.email === email
-        );
-
-        if (loggedInUserVolunteer) {
+        const loggedInUser = volunteersList.find((vol) => vol.email === email);
+        if (loggedInUser) {
           setProfile({
-            id: loggedInUserVolunteer.id || "",
-            firstName: loggedInUserVolunteer.firstName || "",
-            lastName: loggedInUserVolunteer.lastName || "",
-            phone: loggedInUserVolunteer.phone || "",
-            addressLine1: loggedInUserVolunteer.addressLine1 || "",
-            addressLine2: loggedInUserVolunteer.addressLine2 || "",
-            postcode: loggedInUserVolunteer.postcode || "",
-            state: loggedInUserVolunteer.state || "",
-            area: loggedInUserVolunteer.area || "",
-            email: loggedInUserVolunteer.email || "",
-            location: loggedInUserVolunteer.location || "",
-            country: loggedInUserVolunteer.country || "",
-            region: loggedInUserVolunteer.region || "",
-            active: loggedInUserVolunteer.active || false, // Adding the active status
+            id: loggedInUser.id || "",
+            firstName: loggedInUser.firstName || "",
+            lastName: loggedInUser.lastName || "",
+            phone: loggedInUser.phone || "",
+            addressLine1: loggedInUser.addressLine1 || "",
+            addressLine2: loggedInUser.addressLine2 || "",
+            postcode: loggedInUser.postcode || "",
+            state: loggedInUser.state || "",
+            area: loggedInUser.area || "",
+            email: loggedInUser.email || "",
+            location: loggedInUser.location || "",
+            country: loggedInUser.country || "",
+            region: loggedInUser.region || "",
+            active: loggedInUser.active || false,
           });
-          setAddress(loggedInUserVolunteer.location || "");
+          setAddress(loggedInUser.location || "");
         }
       } catch (error) {
         console.error("Error fetching volunteer data:", error);
       }
     };
 
-    fetchVolunteer(); // Trigger the fetch once the email is available
-  }, [email]); // Only rerun when `email` changes
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProfile((prevProfile) => ({
-      ...prevProfile,
-      [name]: value,
-    }));
-  };
+    fetchVolunteer();
+  }, [email]);
 
   const handleSaveProfile = async () => {
     try {
-      // Update profile with new location if available
       const updatedProfile = {
         ...profile,
-        location: address || profile.location, // Save the selected address
+        location: address || profile.location,
+        lat: selectedLocation?.lat || profile.lat, // Save latitude
+        lng: selectedLocation?.lng || profile.lng, // Save longitude
       };
 
-      const userRef = doc(db, "Users", profile.id); // Ensure profile has an `id`
+      const userRef = doc(db, "Users", profile.id);
       await updateDoc(userRef, updatedProfile);
       console.log("Profile updated successfully:", updatedProfile);
-      setIsEditing(false); // Disable editing mode after saving
+      setIsEditing(false);
     } catch (error) {
       console.error("Error updating profile:", error);
     }
   };
 
-  const toggleActiveStatus = () => {
-    setProfile((prevProfile) => ({
-      ...prevProfile,
-      active: !prevProfile.active, // Toggle the active status
-    }));
-  };
-
-  const getAddress = async (lat, lng) => {
+  const getAddressFromLatLng = async (lat, lng) => {
     try {
       const response = await axios.get(
         `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
       );
-      setAddress(response.data.display_name);
+      return response.data.display_name;
     } catch (error) {
       console.error("Error fetching address:", error);
+      return "";
     }
   };
 
   const LocationMap = () => {
     const map = useMapEvents({
-      click(e) {
+      click: async (e) => {
         if (isEditing) {
           const { lat, lng } = e.latlng;
+          const address = await getAddressFromLatLng(lat, lng);
           setSelectedLocation({ lat, lng });
-          getAddress(lat, lng);
+          setAddress(address);
           map.flyTo(e.latlng, map.getZoom());
         }
       },
@@ -199,7 +186,9 @@ const Profile = ({ token, handleToken }) => {
                     className="form-control"
                     name="firstName"
                     value={profile.firstName}
-                    onChange={handleChange}
+                    onChange={(e) =>
+                      setProfile({ ...profile, firstName: e.target.value })
+                    }
                     disabled={!isEditing}
                   />
                 </div>
@@ -210,72 +199,77 @@ const Profile = ({ token, handleToken }) => {
                     className="form-control"
                     name="lastName"
                     value={profile.lastName}
-                    onChange={handleChange}
+                    onChange={(e) =>
+                      setProfile({ ...profile, lastName: e.target.value })
+                    }
                     disabled={!isEditing}
                   />
                 </div>
               </div>
               <div className="row mt-3">
                 <div className="col-md-12">
-                  <label className="labels">Mobile Number</label>
+                  <label className="labels">Mobile</label>
                   <input
                     type="text"
                     className="form-control"
                     name="phone"
                     value={profile.phone}
-                    onChange={handleChange}
+                    onChange={(e) =>
+                      setProfile({ ...profile, phone: e.target.value })
+                    }
                     disabled={!isEditing}
                   />
                 </div>
                 <div className="col-md-12">
-                  <label className="labels">Address Line 1</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="addressLine1"
-                    value={profile.addressLine1}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                  />
-                </div>
-                <div className="col-md-12">
-                  <label className="labels">Email ID</label>
+                  <label className="labels">Email</label>
                   <input
                     type="email"
                     className="form-control"
-                    name="email"
                     value={profile.email}
-                    onChange={handleChange}
                     disabled
                   />
                 </div>
                 <div className="col-md-12">
-                  <label className="labels">Location</label>
+                  <label className="labels">Address</label>
                   <input
                     type="text"
                     className="form-control"
-                    name="location"
-                    value={address || profile.location}
-                    onChange={handleChange}
+                    value={address}
                     disabled={!isEditing}
                   />
                 </div>
               </div>
-              {/* Toggle active status */}
-              <div className="mt-3">
-                <label className="labels">Active</label>
-                <input
-                  type="checkbox"
-                  checked={profile.active}
-                  onChange={toggleActiveStatus}
-                  data-toggle="toggle"
-                  data-on="Ready"
-                  data-off="Not Ready"
-                  data-onstyle="success"
-                  data-offstyle="danger"
+              <div>
+                <button
+                  className="btn btn-secondary"
+                  type="button"
+                  onClick={handleLocateMe}
                   disabled={!isEditing}
-                  className="custom-toggle"
-                />
+                >
+                  Locate Me
+                </button>
+                {showMap && (
+                  <div className="row mt-5">
+                    <div className="col-md-12">
+                      <MapContainer
+                        center={
+                          selectedLocation
+                            ? [selectedLocation.lat, selectedLocation.lng]
+                            : [51.505, -0.09]
+                        }
+                        zoom={13}
+                        style={{ height: "400px", width: "100%" }}
+                      >
+                        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                        {selectedLocation && (
+                          <Marker position={selectedLocation}>
+                            <Popup>{address}</Popup>
+                          </Marker>
+                        )}
+                      </MapContainer>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="mt-5 text-center">
                 <button
@@ -289,22 +283,6 @@ const Profile = ({ token, handleToken }) => {
                 </button>
               </div>
             </div>
-          </div>
-        </div>
-        <div className="row mt-5">
-          <div className="col-md-12">
-            <MapContainer
-              center={userLocation || [51.505, -0.09]} // Center to current location if available
-              zoom={13}
-              style={{ height: "400px", width: "100%" }}
-              ref={mapRef}
-              dragging={isEditing}
-              touchZoom={isEditing}
-              scrollWheelZoom={isEditing}
-            >
-              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-              <LocationMap />
-            </MapContainer>
           </div>
         </div>
       </div>

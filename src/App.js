@@ -1,11 +1,6 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useNavigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./components/HomePage";
 import HelpNeeded from "./components/Helpneeded";
 import Contactus from "./components/Contactus";
@@ -36,12 +31,13 @@ const App = () => {
 
   const handleLogout = () => {
     setToken(false);
-    setUserType("");
+    setUserType("user-token");
     setUserName("");
   };
 
   useEffect(() => {
-    if (isAuthenticated && currentUser) {
+    debugger;
+    if (isAuthenticated && currentUser && token) {
       console.log("Authenticated User:", currentUser.username, userType);
       setUserName(currentUser.username);
       console.log(username, userType);
@@ -52,6 +48,8 @@ const App = () => {
       } else {
         setUserType("user-token");
       }
+    } else {
+      setUserType("user-token");
     }
   }, [isAuthenticated, currentUser, userType, username, handleToken]);
   console.log("App", userType);
@@ -60,7 +58,7 @@ const App = () => {
       <Routes>
         {userType === "admin-token" ? (
           <Route
-            path="/"
+            path="/home"
             element={
               <Dashboard
                 token={token}
@@ -73,7 +71,7 @@ const App = () => {
           />
         ) : userType === "volunteer-token" ? (
           <Route
-            path="/"
+            path="/home"
             element={
               <DashboardVolunteer
                 token={token}

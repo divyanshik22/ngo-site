@@ -16,8 +16,11 @@ const NavbarComponent = ({ token, handleToken, username, handleLogout }) => {
   const navigate = useNavigate();
 
   const handleLogoutBtn = () => {
+    console.log("handle");
+    debugger;
     handleToken(false); // Clear token
     handleLogout();
+    navigate("/");
   };
 
   const handleClose = () => {

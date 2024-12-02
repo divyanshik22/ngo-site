@@ -19,6 +19,7 @@ const NavbarVol = ({ token, handleToken, username, handleLogout }) => {
   const handleLogoutBtn = () => {
     handleToken(false); // Clear token
     handleLogout();
+    navigate("/");
   };
 
   const handleClose = () => {

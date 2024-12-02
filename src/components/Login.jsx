@@ -4,6 +4,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { login } from "./Redux/userSlice";
 import { auth } from "../firebase";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 const Login = ({ show, handleClose, handleToken }) => {
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -12,6 +13,7 @@ const Login = ({ show, handleClose, handleToken }) => {
     password: "",
     authError: "", // Added to show authentication error
   });
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isAuthenticated, error, currentUser } = useSelector(
     (state) => state.user
@@ -52,6 +54,7 @@ const Login = ({ show, handleClose, handleToken }) => {
         );
         handleToken(true);
         handleClose();
+        navigate("/home");
         console.log("User logged in successfully");
       } catch (error) {
         console.error("Error logging in:", error.message);
