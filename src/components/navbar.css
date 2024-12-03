@@ -1,33 +1,70 @@
+/* Remove the border and background on focus for the toggle button */
+.custom-toggler:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Remove any unwanted background */
+.custom-toggler {
+  background-color: transparent;
+}
+
+/* Hamburger and close icons styling */
+.custom-hamburger-icon,
+.custom-close-icon {
+  font-size: 1.5rem;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Navbar background and text color */
 .navbar-custom {
   background-color: #0f6465;
   color: white;
 }
 
-/* Navbar brand image */
-.navbar-brand img {
-  width: 120px;
-  height: 40px;
+.navbar-custom .navbar-toggler {
+  border: none;
+  color: white;
 }
 
-/* Navbar links styling */
 .navbar-custom .nav-link {
   color: white !important;
   margin-left: 1rem;
 }
 
-.navbar-custom .nav-link:hover {
-  color: #e0e0e0; /* Slight hover effect */
-}
-
-/* Button styling */
 .navbar-custom .btn-custom {
   background-color: white;
   color: #0f6465;
   border: none;
 }
+/* .navbar-collapse {
+  align-items: flex-start;
+} */
 
-.navbar-custom .btn-custom:hover {
-  background-color: #e0e0e0;
-  color: #0f6465;
+@media (max-width: 992px) {
+  /* Target screens where the navbar collapses */
+  .navbar-collapse {
+    display: flex; /* Enable flexbox for alignment */
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-start; /* Align items to the left (start) */
+    padding-left: 1rem; /* Add some padding for spacing from the edge */
+  }
+
+  .nav-link {
+    text-align: left; /* Left-align navigation links */
+    margin: 0.5rem 0; /* Add space between navigation items */
+  }
+
+  .btn-custom {
+    width: 100%; /* Set button width to 50% */
+    font-size: 1rem; /* Adjust font size for better readability */
+    margin: 0.5rem 0; /* Add space between buttons */
+  }
+
+  .dropdown-menu {
+    text-align: left; /* Align dropdown items to the left */
+  }
 }

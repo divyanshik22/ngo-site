@@ -24,15 +24,15 @@ const HomePage = ({
   const markers = [
     {
       geocode: [23.393607, 76.132492],
-      popUp: "Hello, I am pop up 1",
+      popUp: "Ngo 1",
     },
     {
       geocode: [25.291267, 81.864672],
-      popUp: "Hello, I am pop up 2",
+      popUp: "Ngo 2",
     },
     {
       geocode: [23.215652, 83.996074],
-      popUp: "Hello, I am pop up 3",
+      popUp: "Ngo 3",
     },
   ];
 

@@ -12,12 +12,11 @@ import "./navbar.css";
 const NavbarComponent = ({ token, handleToken, username, handleLogout }) => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
+  const [isNavExpanded, setIsNavExpanded] = useState(false);
 
   const navigate = useNavigate();
 
   const handleLogoutBtn = () => {
-    console.log("handle");
-    debugger;
     handleToken(false); // Clear token
     handleLogout();
     navigate("/");
@@ -40,11 +39,7 @@ const NavbarComponent = ({ token, handleToken, username, handleLogout }) => {
 
   return (
     <>
-      <Navbar
-        collapseOnSelect
-        expand="lg"
-        style={{ backgroundColor: "#0f6465", color: "white" }}
-      >
+      <Navbar expand="lg" className="navbar-custom" expanded={isNavExpanded}>
         <Navbar.Brand as={Link} to="/">
           <img
             src={logo}
@@ -54,67 +49,42 @@ const NavbarComponent = ({ token, handleToken, username, handleLogout }) => {
             className="d-inline-block align-top"
           />
         </Navbar.Brand>
+        <Navbar.Toggle
+          aria-controls="responsive-navbar-nav"
+          onClick={() => setIsNavExpanded(!isNavExpanded)}
+          className="custom-toggler"
+        >
+          {isNavExpanded ? (
+            <span className="custom-close-icon">&times;</span>
+          ) : (
+            <span className="custom-hamburger-icon">&#9776;</span>
+          )}
+        </Navbar.Toggle>
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mx-auto">
-            <Nav.Link
-              as={Link}
-              to="/"
-              className="ms-3"
-              style={{ color: "white" }}
-            >
+            <Nav.Link as={Link} to="/" className="nav-link">
               Home
             </Nav.Link>
-            <Nav.Link
-              as={Link}
-              to="/helpneeded"
-              className="ms-3"
-              style={{ color: "white" }}
-            >
+            <Nav.Link as={Link} to="/helpneeded" className="nav-link">
               Help Needed
             </Nav.Link>
-            <Nav.Link
-              as={Link}
-              to="/contactus"
-              className="ms-3"
-              style={{ color: "white" }}
-            >
+            <Nav.Link as={Link} to="/contactus" className="nav-link">
               Contact Us
             </Nav.Link>
-            <Nav.Link
-              as={Link}
-              to="/feedback"
-              className="ms-3"
-              style={{ color: "white" }}
-            >
+            <Nav.Link as={Link} to="/feedback" className="nav-link">
               Feedback
             </Nav.Link>
-            <Nav.Link
-              as={Link}
-              to="/donate"
-              className="ms-3"
-              style={{ color: "white" }}
-            >
+            <Nav.Link as={Link} to="/donate" className="nav-link">
               Donate
             </Nav.Link>
-            <Nav.Link
-              as={Link}
-              to="/ngonearby"
-              className="ms-3"
-              style={{ color: "white" }}
-            >
+            <Nav.Link as={Link} to="/ngonearby" className="nav-link">
               NGO Nearby
             </Nav.Link>
           </Nav>
           <Nav>
             {token ? (
               <Dropdown>
-                <Dropdown.Toggle
-                  style={{
-                    backgroundColor: "white",
-                    color: "#0f6465",
-                    border: "none",
-                  }}
-                >
+                <Dropdown.Toggle className="btn-custom">
                   {username}
                 </Dropdown.Toggle>
                 <Dropdown.Menu align="end">
@@ -128,27 +98,10 @@ const NavbarComponent = ({ token, handleToken, username, handleLogout }) => {
               </Dropdown>
             ) : (
               <>
-                <Button
-                  variant="info"
-                  onClick={Loginbtn}
-                  className="me-1"
-                  style={{
-                    backgroundColor: "white",
-                    color: "#0f6465",
-                    border: "none",
-                  }}
-                >
+                <Button onClick={Loginbtn} className="btn-custom me-2">
                   Sign In
                 </Button>
-                <Button
-                  variant="info"
-                  onClick={Signupbtn}
-                  style={{
-                    backgroundColor: "white",
-                    color: "#0f6465",
-                    border: "none",
-                  }}
-                >
+                <Button onClick={Signupbtn} className="btn-custom">
                   Signup
                 </Button>
               </>

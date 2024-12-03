@@ -36,7 +36,6 @@ const App = () => {
   };
 
   useEffect(() => {
-    debugger;
     if (isAuthenticated && currentUser && token) {
       console.log("Authenticated User:", currentUser.username, userType);
       setUserName(currentUser.username);

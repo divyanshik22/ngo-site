@@ -1,48 +1,45 @@
-/* Container styling */
 .container-fluid {
   background-color: #0f6465;
   color: white;
-  margin-bottom: 0;
-  padding-bottom: 0;
+  margin: 0;
+  padding: 3rem 1rem;
 }
 
-/* Footer styling */
-.footer {
-  padding-top: 3rem;
-}
-
-/* Title styling */
-.footer h5 {
+.container-fluid h5,
+.container-fluid h6 {
   color: white;
+  margin-bottom: 1rem;
 }
 
-/* Paragraph text in footer */
-.footer p {
-  color: white;
-}
-
-/* Link styling */
-.container-fluid .nav-link {
+.nav-link {
   color: white !important;
-  padding: 0;
+  text-decoration: none;
 }
 
-.container-fluid .nav-link:hover {
-  color: #ddd !important; /* Optional: lighter shade on hover */
+.nav-link:hover {
+  color: #ddd !important;
 }
 
-/* Subscription input and button styling */
-.d-flex input[type="text"] {
+.list-unstyled li {
+  margin-bottom: 0.5rem;
+}
+
+.form-control {
+  background-color: white;
   color: black;
 }
 
-.d-flex .btn-primary {
+.btn-primary {
   background-color: #007bff;
   border-color: #007bff;
-  color: white;
 }
 
-.d-flex .btn-primary:hover {
+.btn-primary:hover {
   background-color: #0056b3;
   border-color: #0056b3;
+}
+.vertical-divider {
+  border-left: 0.5px solid white;
+  height: 100%; /* Adjust this if needed */
+  margin: 0 auto;
 }
