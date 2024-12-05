@@ -8,7 +8,14 @@ import { addDoc, collection } from "firebase/firestore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Feedback = ({ token, handleToken }) => {
+const Feedback = ({
+  token,
+  userType,
+  handleToken,
+  handleUser,
+  username,
+  handleLogout,
+}) => {
   const [showSignup, setShowSignup] = useState(false);
 
   const [name, setName] = useState("");
@@ -114,7 +121,13 @@ const Feedback = ({ token, handleToken }) => {
   return (
     <>
       {showSignup && <LogIn show={showSignup} handleClose={handleClose} />}
-      <Navbar token={token} handleToken={handleToken} />
+      <Navbar
+        token={token}
+        handleToken={handleToken}
+        handleUser={handleUser}
+        username={username}
+        handleLogout={handleLogout}
+      />
 
       <Container className="mt-5">
         <Row className="justify-content-center">

@@ -16,7 +16,14 @@ import "leaflet/dist/leaflet.css";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
-const Profile = ({ token }) => {
+const Profile = ({
+  token,
+  userType,
+  handleToken,
+  handleUser,
+  username,
+  handleLogout,
+}) => {
   const [profile, setProfile] = useState({
     id: "",
     firstName: "",
@@ -158,7 +165,13 @@ const Profile = ({ token }) => {
 
   return (
     <>
-      <Navbar token={token} />
+      <Navbar
+        token={token}
+        handleToken={handleToken}
+        handleUser={handleUser}
+        username={username}
+        handleLogout={handleLogout}
+      />
       <div className="container rounded bg-white mt-5 mb-5">
         <div className="row">
           <div className="col-md-3 border-right">

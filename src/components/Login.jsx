@@ -54,7 +54,7 @@ const Login = ({ show, handleClose, handleToken }) => {
         );
         handleToken(true);
         handleClose();
-        navigate("/home");
+        navigate("/");
         console.log("User logged in successfully");
       } catch (error) {
         console.error("Error logging in:", error.message);

@@ -18,7 +18,14 @@ import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 
-const Helpneeded = ({ token, handleToken }) => {
+const Helpneeded = ({
+  token,
+  userType,
+  handleToken,
+  handleUser,
+  username,
+  handleLogout,
+}) => {
   const [volunteers, setVolunteers] = useState([]);
   const [helpType, setHelpType] = useState("");
   const [signIn, setSignIn] = useState(true);
@@ -164,7 +171,13 @@ const Helpneeded = ({ token, handleToken }) => {
 
   return (
     <>
-      <Navbar token={token} handleToken={handleToken} />
+      <Navbar
+        token={token}
+        handleToken={handleToken}
+        handleUser={handleUser}
+        username={username}
+        handleLogout={handleLogout}
+      />
       <Container className="mt-4">
         <h2 className="text-center mb-4">Enter the Details</h2>
         <Form>
@@ -248,7 +261,7 @@ const Helpneeded = ({ token, handleToken }) => {
                   justifyContent: "center",
                 }}
               >
-                <span>Loading your location...</span>
+                <span>Please allow to access the location</span>
               </div>
             )}
             <input

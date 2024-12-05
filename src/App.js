@@ -57,7 +57,7 @@ const App = () => {
       <Routes>
         {userType === "admin-token" ? (
           <Route
-            path="/home"
+            path="/"
             element={
               <Dashboard
                 token={token}
@@ -70,7 +70,7 @@ const App = () => {
           />
         ) : userType === "volunteer-token" ? (
           <Route
-            path="/home"
+            path="/"
             element={
               <DashboardVolunteer
                 token={token}
@@ -95,20 +95,113 @@ const App = () => {
             }
           />
         )}
-        <Route path="/helpNeeded" element={<HelpNeeded token={token} />} />
-        <Route path="/contactus" element={<Contactus token={token} />} />
-        <Route path="/feedback" element={<Feedback token={token} />} />
+        <Route
+          path="/helpNeeded"
+          element={
+            <HelpNeeded
+              token={token}
+              handleToken={handleToken}
+              userType={userType}
+              username={username}
+              handleLogout={handleLogout}
+            />
+          }
+        />
+        <Route
+          path="/contactus"
+          element={
+            <Contactus
+              token={token}
+              handleToken={handleToken}
+              userType={userType}
+              username={username}
+              handleLogout={handleLogout}
+            />
+          }
+        />
+        <Route
+          path="/feedback"
+          element={
+            <Feedback
+              token={token}
+              handleToken={handleToken}
+              userType={userType}
+              username={username}
+              handleLogout={handleLogout}
+            />
+          }
+        />
         <Route
           path="/feedbackrequired"
-          element={<FeedBackRecived token={token} />}
+          element={
+            <FeedBackRecived
+              token={token}
+              handleToken={handleToken}
+              userType={userType}
+              username={username}
+              handleLogout={handleLogout}
+            />
+          }
         />
-        <Route path="/ngonearby" element={<Ngonear token={token} />} />
-        <Route path="/donate" element={<Donate token={token} />} />
-        <Route path="/profileVol" element={<Profile token={token} />} />
-        <Route path="/profileAdmin" element={<ProfileAdmin token={token} />} />
+        <Route
+          path="/ngonearby"
+          element={
+            <Ngonear
+              token={token}
+              handleToken={handleToken}
+              userType={userType}
+              username={username}
+              handleLogout={handleLogout}
+            />
+          }
+        />
+        <Route
+          path="/donate"
+          element={
+            <Donate
+              token={token}
+              handleToken={handleToken}
+              userType={userType}
+              username={username}
+              handleLogout={handleLogout}
+            />
+          }
+        />
+        <Route
+          path="/profileVol"
+          element={
+            <Profile
+              token={token}
+              handleToken={handleToken}
+              userType={userType}
+              username={username}
+              handleLogout={handleLogout}
+            />
+          }
+        />
+        <Route
+          path="/profileAdmin"
+          element={
+            <ProfileAdmin
+              token={token}
+              handleToken={handleToken}
+              userType={userType}
+              username={username}
+              handleLogout={handleLogout}
+            />
+          }
+        />
         <Route
           path="/volunteerList"
-          element={<VolunteerList token={token} />}
+          element={
+            <VolunteerList
+              token={token}
+              handleToken={handleToken}
+              userType={userType}
+              username={username}
+              handleLogout={handleLogout}
+            />
+          }
         />
       </Routes>
     </Router>

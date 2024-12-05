@@ -6,7 +6,14 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "./Homepage.css";
 import "leaflet/dist/leaflet.css";
 import { Icon } from "leaflet";
-const Ngonear = ({ token, handleToken }) => {
+const Ngonear = ({
+  token,
+  userType,
+  handleToken,
+  handleUser,
+  username,
+  handleLogout,
+}) => {
   const [showSignup, setShowSignup] = useState(false);
   const customIcon = new Icon({
     iconUrl: require("../images/pin-map.png"),
@@ -39,7 +46,13 @@ const Ngonear = ({ token, handleToken }) => {
   return (
     <>
       {showSignup && <LogIn show={showSignup} handleClose={handleClose} />}
-      <Navbar token={token} handleToken={handleToken} />
+      <Navbar
+        token={token}
+        handleToken={handleToken}
+        handleUser={handleUser}
+        username={username}
+        handleLogout={handleLogout}
+      />
       <MapContainer
         center={[20.5937, 78.9629]}
         zoom={5}
