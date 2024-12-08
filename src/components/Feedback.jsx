@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Navbar from "./NavbarComponent";
 import LogIn from "./Login";
-import { Modal, Form, Button, Row, Col, Container } from "react-bootstrap";
+import { Form, Button, Row, Col, Container } from "react-bootstrap";
 import { FaStar } from "react-icons/fa"; // Install react-icons : npm install react-icons
 import { db } from "../firebase";
 import { addDoc, collection } from "firebase/firestore";
@@ -29,92 +29,72 @@ const Feedback = ({
     rating: "",
     feedback: "",
   });
-  const [userDetails, setUserDetails] = useState(null);
 
-  const handleClose = () => {
-    setShowSignup(false);
-  };
+  const handleClose = () => setShowSignup(false);
+  const Signupbtn = () => setShowSignup(true);
 
-  const Signupbtn = () => {
-    setShowSignup(true);
-  };
+  const handleStarClick = (value) => setRating(value);
 
-  const handleStarClick = (value) => {
-    setRating(value);
-  };
-
-  const validateName = () => {
-    if (!name) {
-      setErrors((prev) => ({ ...prev, name: "Name is required" }));
-      return false;
-    } else {
-      setErrors((prev) => ({ ...prev, name: "" }));
-      return true;
-    }
-  };
-
+  // Validation functions
+  const validateName = () => (name ? "" : "Name is required");
   const validateEmail = () => {
-    if (!email) {
-      setErrors((prev) => ({ ...prev, email: "Email is required" }));
-      return false;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setErrors((prev) => ({ ...prev, email: "Invalid email format" }));
-      return false;
-    } else {
-      setErrors((prev) => ({ ...prev, email: "" }));
-      return true;
-    }
+    if (!email) return "Email is required";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      return "Invalid email format";
+    return "";
   };
-
-  const validateRating = () => {
-    if (rating === 0) {
-      setErrors((prev) => ({ ...prev, rating: "Rating is required" }));
-      return false;
-    } else {
-      setErrors((prev) => ({ ...prev, rating: "" }));
-      return true;
-    }
-  };
-
-  const validateFeedback = () => {
-    if (!feedback) {
-      setErrors((prev) => ({ ...prev, feedback: "Feedback is required" }));
-      return false;
-    } else {
-      setErrors((prev) => ({ ...prev, feedback: "" }));
-      return true;
-    }
-  };
+  const validateRating = () => (rating === 0 ? "Rating is required" : "");
+  const validateFeedback = () => (feedback ? "" : "Feedback is required");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const isNameValid = validateName();
-    const isEmailValid = validateEmail();
-    const isRatingValid = validateRating();
-    const isFeedbackValid = validateFeedback();
+    // Validate fields
+    const nameError = validateName();
+    const emailError = validateEmail();
+    const ratingError = validateRating();
+    const feedbackError = validateFeedback();
 
-    if (isNameValid && isEmailValid && isRatingValid && isFeedbackValid) {
-      toast.success("Thank you for the feedback", {
-        position: "top-center",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "light",
-      });
-      setName("");
-      setEmail("");
-      setRating("");
-      setFeedback("");
-      await addDoc(collection(db, "Feedback"), {
-        name: name,
-        email: email,
-        rating: rating,
-        feedback: feedback,
-      });
-      // Implement form submission logic here
+    // Update errors and check if form is valid
+    setErrors({
+      name: nameError,
+      email: emailError,
+      rating: ratingError,
+      feedback: feedbackError,
+    });
+
+    if (!nameError && !emailError && !ratingError && !feedbackError) {
+      try {
+        toast.success("Thank you for the feedback", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "light",
+        });
+        setName("");
+        setEmail("");
+        setRating(0);
+        setFeedback("");
+        await addDoc(collection(db, "Feedback"), {
+          name,
+          email,
+          rating,
+          feedback,
+        });
+      } catch (error) {
+        toast.error("An error occurred while submitting the feedback", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "light",
+        });
+      }
     }
   };
 
@@ -128,12 +108,12 @@ const Feedback = ({
         username={username}
         handleLogout={handleLogout}
       />
-
       <Container className="mt-5">
         <Row className="justify-content-center">
           <Col md={6}>
             <h2>Feedback Form</h2>
             <Form onSubmit={handleSubmit}>
+              {/* Name Field */}
               <Form.Group controlId="formName">
                 <Form.Label>Name</Form.Label>
                 <Form.Control
@@ -141,7 +121,6 @@ const Feedback = ({
                   placeholder="Enter your name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  onBlur={validateName} // Trigger validation when the user leaves the field
                   isInvalid={!!errors.name}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -149,6 +128,7 @@ const Feedback = ({
                 </Form.Control.Feedback>
               </Form.Group>
 
+              {/* Email Field */}
               <Form.Group controlId="formEmail" className="mt-3">
                 <Form.Label>Email</Form.Label>
                 <Form.Control
@@ -156,7 +136,6 @@ const Feedback = ({
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  onBlur={validateEmail} // Trigger validation onBlur
                   isInvalid={!!errors.email}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -164,6 +143,7 @@ const Feedback = ({
                 </Form.Control.Feedback>
               </Form.Group>
 
+              {/* Rating Field */}
               <Form.Group controlId="formRating" className="mt-3">
                 <Form.Label>Rating (1-5 Stars)</Form.Label>
                 <div>
@@ -182,6 +162,7 @@ const Feedback = ({
                 )}
               </Form.Group>
 
+              {/* Feedback Field */}
               <Form.Group controlId="formFeedback" className="mt-3">
                 <Form.Label>Feedback</Form.Label>
                 <Form.Control
@@ -190,7 +171,6 @@ const Feedback = ({
                   placeholder="Enter your feedback"
                   value={feedback}
                   onChange={(e) => setFeedback(e.target.value)}
-                  onBlur={validateFeedback} // Trigger validation onBlur
                   isInvalid={!!errors.feedback}
                 />
                 <Form.Control.Feedback type="invalid">

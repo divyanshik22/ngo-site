@@ -68,8 +68,8 @@ const NavbarAdmin = ({ token, handleToken, username, handleLogout }) => {
             <Nav.Link as={Link} to="/donate" className="nav-link ms-3">
               Item Donated
             </Nav.Link>
-            <Nav.Link as={Link} to="/ngonearby" className="nav-link ms-3">
-              NGO Nearby
+            <Nav.Link as={Link} to="/ngodetails" className="nav-link ms-3">
+              Ngo Details
             </Nav.Link>
           </Nav>
           <Nav>

@@ -12,6 +12,7 @@ import FeedBackRecived from "./components/Admin/FeedBackRecived";
 import DashboardVolunteer from "./components/Volunteer/Dashboard";
 import Profile from "./components/Volunteer/Profile";
 import ProfileAdmin from "./components/Admin/Profile";
+import Ngodetails from "./components/Admin/Ngodetails";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "./components/Redux/userSlice";
 import VolunteerList from "./components/Admin/VolunteerList";
@@ -36,6 +37,7 @@ const App = () => {
   };
 
   useEffect(() => {
+    console.log(currentUser, isAuthenticated, token);
     if (isAuthenticated && currentUser && token) {
       console.log("Authenticated User:", currentUser.username, userType);
       setUserName(currentUser.username);
@@ -135,6 +137,18 @@ const App = () => {
           path="/feedbackrequired"
           element={
             <FeedBackRecived
+              token={token}
+              handleToken={handleToken}
+              userType={userType}
+              username={username}
+              handleLogout={handleLogout}
+            />
+          }
+        />
+        <Route
+          path="/ngodetails"
+          element={
+            <Ngodetails
               token={token}
               handleToken={handleToken}
               userType={userType}

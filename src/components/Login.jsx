@@ -5,6 +5,9 @@ import { login } from "./Redux/userSlice";
 import { auth } from "../firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const Login = ({ show, handleClose, handleToken }) => {
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -47,24 +50,61 @@ const Login = ({ show, handleClose, handleToken }) => {
     if (formIsValid) {
       try {
         dispatch(login({ emailOrPhone, password }));
+        toast.success("Logged In", {
+          position: "top-center",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "light",
+        });
         const userCredential = await signInWithEmailAndPassword(
           auth,
           emailOrPhone,
           password
         );
         handleToken(true);
+
         handleClose();
         navigate("/");
         console.log("User logged in successfully");
       } catch (error) {
         console.error("Error logging in:", error.message);
-
+        toast.error("Username or password does not match", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "light",
+        });
         // Update errors with authError if login fails
         newErrors.authError = "Username or password does not match";
       }
     }
     setErrors(newErrors);
   };
+  const handleInputChange = (field, value) => {
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [field]: "",
+    }));
+
+    switch (field) {
+      case "email":
+        setEmailOrPhone(value);
+        break;
+      case "password":
+        setPassword(value);
+        break;
+
+      default:
+        break;
+    }
+  };
+
   // useEffect(() => {
   //   console.log(isAuthenticated, currentUser);
   //   if (isAuthenticated && currentUser) {
@@ -74,52 +114,55 @@ const Login = ({ show, handleClose, handleToken }) => {
   //   }
   // }, [isAuthenticated, currentUser, handleToken, handleClose]);
   return (
-    <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header closeButton>
-        <Modal.Title>Welcome Back!</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="emailOrPhone.ControlInput1">
-            <Form.Label>Email/Phone Number</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Email/Phone number"
-              value={emailOrPhone}
-              onChange={(e) => setEmailOrPhone(e.target.value)}
-              isInvalid={!!errors.emailOrPhone}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.emailOrPhone}
-            </Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="password.ControlInput1">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              isInvalid={!!errors.password}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.password}
-            </Form.Control.Feedback>
-          </Form.Group>
+    <>
+      <Modal show={show} onHide={handleClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Welcome Back!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-3" controlId="emailOrPhone.ControlInput1">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Email"
+                value={emailOrPhone}
+                onChange={(e) => handleInputChange("email", e.target.value)}
+                isInvalid={!!errors.emailOrPhone}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.emailOrPhone}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="password.ControlInput1">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => handleInputChange("password", e.target.value)}
+                isInvalid={!!errors.password}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.password}
+              </Form.Control.Feedback>
+            </Form.Group>
 
-          {/* Show Firebase authentication error */}
-          {errors.authError && (
-            <div className="text-danger mb-3">{errors.authError}</div>
-          )}
+            {/* Show Firebase authentication error */}
+            {errors.authError && (
+              <div className="text-danger mb-3">{errors.authError}</div>
+            )}
 
-          <div className="text-center">
-            <Button variant="info" type="submit">
-              Sign In
-            </Button>
-          </div>
-        </Form>
-      </Modal.Body>
-    </Modal>
+            <div className="text-center">
+              <Button variant="info" type="submit">
+                Sign In
+              </Button>
+            </div>
+          </Form>
+        </Modal.Body>
+      </Modal>
+      <ToastContainer />
+    </>
   );
 };
 

@@ -1,6 +1,7 @@
 import React from "react";
 import logo from "../images/Logoo.png"; // Update path to your logo
 import "./Aboutus.css";
+import { Link, useNavigate } from "react-router-dom";
 
 const Aboutus = () => {
   return (
@@ -38,29 +39,29 @@ const Aboutus = () => {
           <h5>Quick Links</h5>
           <ul className="nav flex-column">
             <li className="nav-item mb-2">
-              <a href="/" className="nav-link p-0">
+              <Link to="/" className="nav-link p-0">
                 Home
-              </a>
+              </Link>
             </li>
             <li className="nav-item mb-2">
-              <a href="/helpneeded" className="nav-link p-0">
+              <Link to="/helpneeded" className="nav-link p-0">
                 Help Needed
-              </a>
+              </Link>
             </li>
             <li className="nav-item mb-2">
-              <a href="/contactus" className="nav-link p-0">
+              <Link to="/contactus" className="nav-link p-0">
                 Contact Us
-              </a>
+              </Link>
             </li>
             <li className="nav-item mb-2">
-              <a href="/feedback" className="nav-link p-0">
+              <Link to="/feedback" className="nav-link p-0">
                 Feedback
-              </a>
+              </Link>
             </li>
             <li className="nav-item mb-2">
-              <a href="/donate" className="nav-link p-0">
+              <Link to="/donate" className="nav-link p-0">
                 Donate
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -73,19 +74,6 @@ const Aboutus = () => {
             <li>Phone: +1 (123) 456-7890</li>
             <li>Address: 123 Main Street, City, Country</li>
           </ul>
-          <form>
-            <h6>Subscribe to Our Newsletter</h6>
-            <div className="d-flex flex-column flex-sm-row w-100 gap-2">
-              <input
-                type="email"
-                className="form-control"
-                placeholder="Email address"
-              />
-              <button className="btn btn-primary" type="button">
-                Subscribe
-              </button>
-            </div>
-          </form>
         </div>
       </div>
     </div>

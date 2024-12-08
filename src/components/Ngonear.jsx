@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "./NavbarComponent";
 import LogIn from "./Login";
-import { Modal, Form, Button, Row, Col, Container } from "react-bootstrap";
+
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "./Homepage.css";
 import "leaflet/dist/leaflet.css";
 import { Icon } from "leaflet";
+import { db } from "../firebase"; // Adjust path to Firebase config
+import { collection, getDocs } from "firebase/firestore"; // Firebase methods
+import { Container, Table, Button, Form, Modal, Nav } from "react-bootstrap";
+
 const Ngonear = ({
   token,
   userType,
@@ -15,25 +19,30 @@ const Ngonear = ({
   handleLogout,
 }) => {
   const [showSignup, setShowSignup] = useState(false);
+  const [ngos, setNgos] = useState([]);
   const customIcon = new Icon({
     iconUrl: require("../images/pin-map.png"),
     iconSize: [38, 38],
   });
 
-  const markers = [
-    {
-      geocode: [23.393607, 76.132492],
-      popUp: "Hello, I am pop up 1",
-    },
-    {
-      geocode: [25.291267, 81.864672],
-      popUp: "Hello, I am pop up 2",
-    },
-    {
-      geocode: [23.215652, 83.996074],
-      popUp: "Hello, I am pop up 3",
-    },
-  ];
+  // Fetch NGO data from Firebase
+  useEffect(() => {
+    const fetchNgos = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "NgoDetails"));
+        const ngosList = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        console.log(ngosList);
+        setNgos(ngosList);
+      } catch (error) {
+        console.error("Error fetching NGOs:", error);
+      }
+    };
+
+    fetchNgos();
+  }, []);
 
   const handleClose = () => {
     setShowSignup(false);
@@ -53,22 +62,39 @@ const Ngonear = ({
         username={username}
         handleLogout={handleLogout}
       />
-      <MapContainer
-        center={[20.5937, 78.9629]}
-        zoom={5}
-        style={{ height: "500px", width: "100%" }}
-      >
-        <TileLayer
-          url="https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg?apikey=1bdb70dc-0053-4aee-a0e7-fa4a9097a99f"
-          maxZoom={20}
-        />
-        {markers.map((marker, index) => (
-          <Marker key={index} position={marker.geocode} icon={customIcon}>
-            <Popup>{marker.popUp}</Popup>
-          </Marker>
-        ))}
-      </MapContainer>
+
+      <Container>
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone Number</th>
+              <th>Website</th>
+              <th>Reviews</th>
+              <th>Location</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ngos.map((ngo) => (
+              <tr key={ngo.id}>
+                <td>{ngo.name}</td>
+                <td>{ngo.email}</td>
+                <td>{ngo.phone}</td>
+                <td>{ngo.website}</td>
+                <td>{ngo.reviews}</td>
+                <td>{ngo.location}</td>
+                <td>
+                  <Button variant="info">View</Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </Container>
     </>
   );
 };
+
 export default React.memo(Ngonear);

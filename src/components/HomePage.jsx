@@ -94,19 +94,32 @@ const HomePage = ({
     },
   ];
 
-  const renderCards = (cards) => {
-    return cards.map((card, index) => (
-      <Col key={index} md={3}>
-        <Card style={{ margin: "10px" }}>
-          <Card.Body>
-            <Card.Title>{card.title}</Card.Title>
-            <Card.Text>{card.text}</Card.Text>
-          </Card.Body>
-        </Card>
-      </Col>
-    ));
-  };
+  // const renderCards = (cards) => {
+  //   return cards.map((card, index) => (
+  //     <Col key={index} md={3}>
+  //       <Card style={{ margin: "10px" }}>
+  //         <Card.Body>
+  //           <Card.Title>{card.title}</Card.Title>
+  //           <Card.Text>{card.text}</Card.Text>
+  //         </Card.Body>
+  //       </Card>
+  //     </Col>
+  //   ));
+  // };
+  const CardComponent = ({ data }) => (
+    <div className="col-md-6 col-lg-3">
+      <div className="card border-0 shadow-lg h-100 text-center p-4 hover-scale">
+        <div className="card-body">
+          {/* You can add content from `data` here */}
+          <h5>{data.title}</h5>
+          <p>{data.text}</p>
+        </div>
+      </div>
+    </div>
+  );
 
+  const renderCards = (cardData) =>
+    cardData.map((stat, index) => <CardComponent key={index} data={stat} />);
   return (
     <>
       <Navbar
@@ -131,15 +144,20 @@ const HomePage = ({
           of a compassionate community dedicated to making the world a better
           place.
         </p>
-        <div className="custom-carousel">
-          <Carousel indicators={false} interval={3000}>
-            <Carousel.Item>
-              <Row>{renderCards(cardData.slice(0, 4))}</Row>
-            </Carousel.Item>
-            <Carousel.Item>
-              <Row>{renderCards(cardData.slice(4, 8))}</Row>
-            </Carousel.Item>
-          </Carousel>
+        <div>
+          {/* Card Grid */}
+
+          {/* Carousel */}
+          <div className="custom-carousel">
+            <Carousel indicators={false} interval={3000}>
+              <Carousel.Item>
+                <Row>{renderCards(cardData.slice(0, 4))}</Row>
+              </Carousel.Item>
+              <Carousel.Item>
+                <Row>{renderCards(cardData.slice(4, 8))}</Row>
+              </Carousel.Item>
+            </Carousel>
+          </div>
         </div>
       </Container>
 
