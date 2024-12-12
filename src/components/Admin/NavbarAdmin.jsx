@@ -9,7 +9,13 @@ import Login from "../Login";
 import Signup from "../Signup";
 import "./navbaradmin.css";
 
-const NavbarAdmin = ({ token, handleToken, username, handleLogout }) => {
+const NavbarAdmin = ({
+  token,
+  handleToken,
+  userType,
+  username,
+  handleLogout,
+}) => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
 
@@ -79,7 +85,7 @@ const NavbarAdmin = ({ token, handleToken, username, handleLogout }) => {
                   {username}
                 </Dropdown.Toggle>
                 <Dropdown.Menu align="end">
-                  <Dropdown.Item as={Link} to="/profile">
+                  <Dropdown.Item as={Link} to="/profileAdmin">
                     Profile
                   </Dropdown.Item>
                   <Dropdown.Item onClick={handleLogoutBtn}>

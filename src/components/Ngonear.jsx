@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./NavbarComponent";
 import LogIn from "./Login";
-
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "./Homepage.css";
-import "leaflet/dist/leaflet.css";
-import { Icon } from "leaflet";
 import { db } from "../firebase"; // Adjust path to Firebase config
 import { collection, getDocs } from "firebase/firestore"; // Firebase methods
-import { Container, Table, Button, Form, Modal, Nav } from "react-bootstrap";
+import { Container, Table, Button } from "react-bootstrap";
 
 const Ngonear = ({
   token,
@@ -20,10 +16,6 @@ const Ngonear = ({
 }) => {
   const [showSignup, setShowSignup] = useState(false);
   const [ngos, setNgos] = useState([]);
-  const customIcon = new Icon({
-    iconUrl: require("../images/pin-map.png"),
-    iconSize: [38, 38],
-  });
 
   // Fetch NGO data from Firebase
   useEffect(() => {
@@ -46,10 +38,6 @@ const Ngonear = ({
 
   const handleClose = () => {
     setShowSignup(false);
-  };
-
-  const Signupbtn = () => {
-    setShowSignup(true);
   };
 
   return (

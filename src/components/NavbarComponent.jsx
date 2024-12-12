@@ -65,6 +65,7 @@ const NavbarComponent = ({ token, handleToken, username, handleLogout }) => {
             <Nav.Link as={Link} to="/" className="nav-link">
               Home
             </Nav.Link>
+
             <Nav.Link as={Link} to="/helpneeded" className="nav-link">
               Help Needed
             </Nav.Link>

@@ -13,8 +13,15 @@ import {
   doc,
 } from "firebase/firestore";
 
-const Ngodetails = ({ token, handleToken, username, handleLogout }) => {
+const Ngodetails = ({
+  token,
+  handleToken,
+  userType,
+  username,
+  handleLogout,
+}) => {
   const [ngos, setNgos] = useState([]);
+  const [user, setUser] = useState("");
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -42,6 +49,7 @@ const Ngodetails = ({ token, handleToken, username, handleLogout }) => {
       setNgos(ngosList);
     };
     fetchNgos();
+    setUser(userType);
   }, []);
 
   // Reverse geocoding to get location name from lat, lng
@@ -277,12 +285,16 @@ const Ngodetails = ({ token, handleToken, username, handleLogout }) => {
                     >
                       View
                     </Button>
-                    <Button
-                      variant="danger"
-                      onClick={() => handleDeleteNgo(ngo.id)}
-                    >
-                      Delete
-                    </Button>
+                    {user == "volunteer-token" ? (
+                      ""
+                    ) : (
+                      <Button
+                        variant="danger"
+                        onClick={() => handleDeleteNgo(ngo.id)}
+                      >
+                        Delete
+                      </Button>
+                    )}
                   </td>
                 </tr>
               ))}

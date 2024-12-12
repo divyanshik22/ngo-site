@@ -13,12 +13,13 @@ import { db } from "../../firebase"; // Adjust path if needed
 
 const VolunteerList = ({
   token,
-
   handleToken,
+  userType,
   username,
   handleLogout,
 }) => {
   const [volunteers, setVolunteers] = useState([]);
+  const [user, setUser] = useState("");
   const [search, setSearch] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,6 +40,7 @@ const VolunteerList = ({
       }
     };
     fetchVolunteers();
+    setUser(userType);
   }, []);
 
   // Delete a volunteer record
@@ -52,12 +54,15 @@ const VolunteerList = ({
   };
 
   // Filtered and Searched Volunteers
-  const filteredVolunteers = volunteers.filter(
-    (volunteer) =>
-      volunteer.location.includes(locationFilter) &&
-      (volunteer.username.toLowerCase().includes(search.toLowerCase()) ||
-        volunteer.location.toLowerCase().includes(search.toLowerCase()))
-  );
+  const filteredVolunteers =
+    volunteers &&
+    volunteers.filter((volunteer) =>
+      volunteer.location
+        ? volunteer.location.includes(locationFilter) &&
+          (volunteer.username.toLowerCase().includes(search.toLowerCase()) ||
+            volunteer.location.toLowerCase().includes(search.toLowerCase()))
+        : volunteers
+    );
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -115,7 +120,7 @@ const VolunteerList = ({
               <th>Phone</th>
               <th>Location</th>
               <th>Status</th>
-              <th>Actions</th>
+              {user == "volunteer-token" ? "" : <th>Actions</th>}
             </tr>
           </thead>
           <tbody>
@@ -130,14 +135,18 @@ const VolunteerList = ({
                   <td>{volunteer.phone}</td>
                   <td>{volunteer.location}</td>
                   <td>{volunteer.active}</td>
-                  <td>
-                    <Button
-                      variant="danger"
-                      onClick={() => handleDelete(volunteer.id)}
-                    >
-                      Delete
-                    </Button>
-                  </td>
+                  {user == "volunteer-token" ? (
+                    ""
+                  ) : (
+                    <td>
+                      <Button
+                        variant="danger"
+                        onClick={() => handleDelete(volunteer.id)}
+                      >
+                        Delete
+                      </Button>
+                    </td>
+                  )}
                 </tr>
               ))}
           </tbody>

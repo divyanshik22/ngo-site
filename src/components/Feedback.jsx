@@ -31,7 +31,6 @@ const Feedback = ({
   });
 
   const handleClose = () => setShowSignup(false);
-  const Signupbtn = () => setShowSignup(true);
 
   const handleStarClick = (value) => setRating(value);
 

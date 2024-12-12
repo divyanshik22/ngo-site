@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import logo from "../../images/Logoo.png";
 import { Link, useNavigate } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
@@ -12,7 +12,6 @@ import "./navbarvol.css";
 const NavbarVol = ({ token, handleToken, username, handleLogout }) => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
-  const [userLoggedIn, setUserLoggedIn] = useState("");
 
   const navigate = useNavigate();
 
@@ -36,10 +35,7 @@ const NavbarVol = ({ token, handleToken, username, handleLogout }) => {
     setShowLogin(false);
     setShowSignup(true);
   };
-  useEffect(() => {
-    setUserLoggedIn(username);
-    console.log(userLoggedIn);
-  }, [username]);
+
   return (
     <>
       <Navbar collapseOnSelect expand="lg" className="navbar-custom">
@@ -60,8 +56,8 @@ const NavbarVol = ({ token, handleToken, username, handleLogout }) => {
             <Nav.Link as={Link} to="/helpneeded" className="nav-link ms-3">
               Help Required
             </Nav.Link>
-            <Nav.Link as={Link} to="/contactus" className="nav-link ms-3">
-              Contacted
+            <Nav.Link as={Link} to="/volunteerList" className="nav-link ms-3">
+              Volunteers
             </Nav.Link>
             <Nav.Link
               as={Link}
@@ -73,8 +69,8 @@ const NavbarVol = ({ token, handleToken, username, handleLogout }) => {
             <Nav.Link as={Link} to="/donate" className="nav-link ms-3">
               Item Donated
             </Nav.Link>
-            <Nav.Link as={Link} to="/ngonearby" className="nav-link ms-3">
-              NGO Nearby
+            <Nav.Link as={Link} to="/ngodetails" className="nav-link ms-3">
+              Ngo Details
             </Nav.Link>
           </Nav>
           <Nav>

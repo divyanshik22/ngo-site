@@ -5,7 +5,7 @@ import Animal from "../../images/Animal";
 
 const Dashboard = ({
   token,
-
+  userType,
   handleToken,
   username,
   handleLogout,
@@ -17,6 +17,7 @@ const Dashboard = ({
         token={token}
         handleToken={handleToken}
         username={username}
+        userType={userType}
         handleLogout={handleLogout}
       />
       <img

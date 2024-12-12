@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { login } from "./Redux/userSlice";
 import { auth } from "../firebase";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Reset from "./Reset";
 
 const Login = ({ show, handleClose, handleToken }) => {
+  const [resetmodalShow, setResetModalShow] = useState(false);
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({
@@ -65,7 +67,6 @@ const Login = ({ show, handleClose, handleToken }) => {
           password
         );
         handleToken(true);
-
         handleClose();
         navigate("/");
         console.log("User logged in successfully");
@@ -154,6 +155,13 @@ const Login = ({ show, handleClose, handleToken }) => {
             )}
 
             <div className="text-center">
+              <Button
+                variant="info"
+                type="submit"
+                onClick={() => setResetModalShow(true)}
+              >
+                Forgot Password?
+              </Button>
               <Button variant="info" type="submit">
                 Sign In
               </Button>
@@ -161,6 +169,7 @@ const Login = ({ show, handleClose, handleToken }) => {
           </Form>
         </Modal.Body>
       </Modal>
+      <Reset show={resetmodalShow} onHide={() => setResetModalShow(false)} />
       <ToastContainer />
     </>
   );
