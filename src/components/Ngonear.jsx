@@ -51,17 +51,18 @@ const Ngonear = ({
         handleLogout={handleLogout}
       />
 
-      <Container>
-        <Table striped bordered hover>
+      <Container className="ngo-container">
+        <h2 className="ngo-title">NGOs Near You</h2>
+        <Table className="ngo-table" hover>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone Number</th>
+              <th>NGO Name</th>
+              <th>Contact Email</th>
+              <th>Phone</th>
               <th>Website</th>
-              <th>Reviews</th>
+              <th>Rating</th>
               <th>Location</th>
-              <th>Actions</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -70,16 +71,31 @@ const Ngonear = ({
                 <td>{ngo.name}</td>
                 <td>{ngo.email}</td>
                 <td>{ngo.phone}</td>
-                <td>{ngo.website}</td>
-                <td>{ngo.reviews}</td>
+                <td>
+                  {ngo.website ? (
+                    <a href={ngo.website} target="_blank" rel="noopener noreferrer" style={{ color: '#D2691E' }}>
+                      Visit Website
+                    </a>
+                  ) : (
+                    'N/A'
+                  )}
+                </td>
+                <td>
+                  {ngo.reviews ? `${ngo.reviews} ⭐` : 'No reviews'}
+                </td>
                 <td>{ngo.location}</td>
                 <td>
-                  <Button variant="info">View</Button>
+                  <Button className="ngo-view-btn">View Details</Button>
                 </td>
               </tr>
             ))}
           </tbody>
         </Table>
+        {ngos.length === 0 && (
+          <div className="text-center py-5" style={{ color: '#D2691E' }}>
+            <h4>Loading NGOs...</h4>
+          </div>
+        )}
       </Container>
     </>
   );

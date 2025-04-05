@@ -5,6 +5,7 @@ import { auth, db } from "../firebase";
 import { setDoc, doc } from "firebase/firestore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./LoginAndSignUp.css";
 
 const Signup = ({ show, handleClose }) => {
   const [username, setUsername] = useState("");
@@ -136,10 +137,10 @@ const Signup = ({ show, handleClose }) => {
   return (
     <>
       <Modal show={show} onHide={handleClose} centered>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton className="custom-body">
           <Modal.Title>Welcome to Utsaah Help the Needy</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="custom-body">
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="username" className="form-label">
@@ -154,6 +155,9 @@ const Signup = ({ show, handleClose }) => {
                 placeholder="Enter your username"
                 value={username}
                 onChange={(e) => handleInputChange("username", e.target.value)}
+                className={`form-control custom-input ${
+                  errors.username ? "is-invalid" : ""
+                }`}
               />
               {errors.username && (
                 <div className="invalid-feedback">{errors.username}</div>
@@ -171,6 +175,9 @@ const Signup = ({ show, handleClose }) => {
                 placeholder="Enter your phone number"
                 value={phone}
                 onChange={(e) => handleInputChange("phone", e.target.value)}
+                className={`form-control custom-input ${
+                  errors.username ? "is-invalid" : ""
+                }`}
               />
               {errors.phone && (
                 <div className="invalid-feedback">{errors.phone}</div>
@@ -225,6 +232,9 @@ const Signup = ({ show, handleClose }) => {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
+                className={`form-control custom-input ${
+                  errors.username ? "is-invalid" : ""
+                }`}
               />
               {errors.email && (
                 <div className="invalid-feedback">{errors.email}</div>
@@ -244,6 +254,9 @@ const Signup = ({ show, handleClose }) => {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => handleInputChange("password", e.target.value)}
+                className={`form-control custom-input ${
+                  errors.username ? "is-invalid" : ""
+                }`}
               />
               {errors.password && (
                 <div className="invalid-feedback">{errors.password}</div>
@@ -251,7 +264,7 @@ const Signup = ({ show, handleClose }) => {
             </div>
 
             <div className="text-center">
-              <Button variant="info" type="submit">
+              <Button type="submit" className="custom-button">
                 Register
               </Button>
             </div>

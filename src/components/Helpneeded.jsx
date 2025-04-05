@@ -17,7 +17,10 @@ import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
-
+import TopImage from "../images/BorderAnimal.png";
+import "./LoginAndSignUp.css";
+import Aboutus from "./Aboutus";
+import BottomBorder from "../images/BottomBorder.png";
 const Helpneeded = ({
   token,
   userType,
@@ -75,7 +78,7 @@ const Helpneeded = ({
       }
     });
 
-    if (nearestVolunteer && minDistance <= 300) {
+    if (nearestVolunteer && minDistance <= 30000) {
       setVolunteerLocation({
         lat: nearestVolunteer.lat,
         lng: nearestVolunteer.lng,
@@ -123,9 +126,11 @@ const Helpneeded = ({
   });
 
   const handleSubmit = () => {
+    console.log(location);
     if (location) {
       findNearestVolunteer();
       setTracking(true);
+      console.log(location);
     } else {
       alert("Please select a location.");
     }
@@ -161,6 +166,7 @@ const Helpneeded = ({
           }))
           .filter((volunteer) => volunteer.lat && volunteer.lng);
         setVolunteers(volunteersList);
+        console.log(volunteersList);
       } catch (error) {
         console.error("Error fetching volunteers:", error);
       }
@@ -178,22 +184,27 @@ const Helpneeded = ({
         username={username}
         handleLogout={handleLogout}
       />
-      <Container className="mt-4">
-        <h2 className="text-center mb-4">Enter the Details</h2>
+      <div style={{ position: "relative",margin:"70px 0px"}}>
+      <img src={TopImage} style={{ position: "absolute",top: -75,left: 50 }} />
+      <Container
+        style={{ backgroundColor: "#ffe7d3" , padding:"30px"}}
+      >
+        <h2 className="text-center mb-4" style={{color:'#0F6465'}}>Enter the Details</h2>
         <Form>
           <Row className="mb-3">
             <Col>
               <Form.Group controlId="formName">
-                <Form.Label>Your Name</Form.Label>
-                <Form.Control type="text" placeholder="Enter your name" />
+                <Form.Label style={{color:'#0F6465'}}>Your Name</Form.Label>
+                <Form.Control type="text" placeholder="Enter your name"  className="custom-input"/>
               </Form.Group>
             </Col>
             <Col>
               <Form.Group controlId="formNumber">
-                <Form.Label>Number</Form.Label>
+                <Form.Label style={{color:'#0F6465'}}>Number</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Enter your phone number"
+                  className="custom-input"
                 />
               </Form.Group>
             </Col>
@@ -201,23 +212,24 @@ const Helpneeded = ({
           <Row className="mb-3">
             <Col>
               <Form.Group controlId="formEmail">
-                <Form.Label>Email</Form.Label>
-                <Form.Control type="email" placeholder="Enter your email" />
+                <Form.Label style={{color:'#0F6465'}}>Email</Form.Label>
+                <Form.Control type="email" placeholder="Enter your email" className="custom-input"/>
               </Form.Group>
             </Col>
           </Row>
 
           <Form.Group className="mb-3" controlId="formProblem">
-            <Form.Label>State the Problem</Form.Label>
+            <Form.Label style={{color:'#0F6465'}}>State the Problem</Form.Label>
             <Form.Control
               as="textarea"
               rows={3}
               placeholder="Describe the problem"
+              className="custom-input"
             />
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Help needed for</Form.Label>
+            <Form.Label style={{color:'#0F6465'}}>Help needed for</Form.Label>
             <div>
               <Form.Check
                 type="radio"
@@ -227,6 +239,7 @@ const Helpneeded = ({
                 onChange={() => setHelpType("animal")}
                 checked={helpType === "animal"}
                 inline
+                className="custom-radio"
               />
               <Form.Check
                 type="radio"
@@ -236,12 +249,13 @@ const Helpneeded = ({
                 onChange={() => setHelpType("people")}
                 checked={helpType === "people"}
                 inline
+                className="custom-radio"
               />
             </div>
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Select Location on Map</Form.Label>
+            <Form.Label style={{color:'#0F6465'}} >Select Location on Map</Form.Label>
             {location ? (
               <MapContainer
                 center={location}
@@ -270,17 +284,18 @@ const Helpneeded = ({
               readOnly
               placeholder="Selected location address"
               style={{ width: "100%", padding: "10px", marginTop: "10px" }}
+              className="custom-input"
             />
           </Form.Group>
 
-          <Button variant="primary" onClick={handleSubmit}>
+          <Button onClick={()=>{handleSubmit();}} className="custom-button">
             Submit
           </Button>
         </Form>
 
         {tracking && volunteerLocation && (
           <>
-            <h3 className="text-center mt-4">Volunteer is on the Way!</h3>
+            <h3 className="text-center mt-4" style={{color:'#0F6465'}}>Volunteer is on the Way!</h3>
             <MapContainer
               center={location}
               zoom={10}
@@ -288,10 +303,10 @@ const Helpneeded = ({
             >
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
               <Marker position={location}>
-                <Popup>Your Location</Popup>
+                <Popup style={{color:'#0F6465'}}>Your Location</Popup>
               </Marker>
               <Marker position={volunteerLocation}>
-                <Popup>Volunteer Location</Popup>
+                <Popup style={{color:'#0F6465'}}>Volunteer Location</Popup>
               </Marker>
               <Polyline
                 positions={[location, volunteerLocation]}
@@ -302,6 +317,11 @@ const Helpneeded = ({
           </>
         )}
       </Container>
+
+      <img src={BottomBorder} style={{ position:"absolute",bottom:"-70px",right:"0px",width:"10%",height:"130px"}} />
+
+      </div>
+      <Aboutus />
     </>
   );
 };

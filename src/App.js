@@ -72,7 +72,7 @@ const App = () => {
       <ToastContainer />
       <Router>
         <Routes>
-          {/* Public Route */}
+          Public Route
           {userType === "admin-token" ? (
             <Route
               path="/"
@@ -113,190 +113,189 @@ const App = () => {
               }
             />
           )}
-
-          {/* Protected Routes */}
+          Protected Routes
           <Route
             path="/helpNeeded"
             element={
-              <ProtectedRoute isAuthenticated={token}>
-                <HelpNeeded
-                  token={token}
-                  handleToken={handleToken}
-                  userType={userType}
-                  username={username}
-                  handleLogout={handleLogout}
-                />
-              </ProtectedRoute>
+              // <ProtectedRoute isAuthenticated={token}>
+              <HelpNeeded
+                token={token}
+                handleToken={handleToken}
+                userType={userType}
+                username={username}
+                handleLogout={handleLogout}
+              />
+              //  </ProtectedRoute>
             }
           />
           <Route
             path="/contactus"
             element={
-              <ProtectedRoute isAuthenticated={token}>
-                <Contactus
-                  token={token}
-                  handleToken={handleToken}
-                  userType={userType}
-                  username={username}
-                  handleLogout={handleLogout}
-                />
-              </ProtectedRoute>
+              // <ProtectedRoute isAuthenticated={token}>
+              <Contactus
+                token={token}
+                handleToken={handleToken}
+                userType={userType}
+                username={username}
+                handleLogout={handleLogout}
+              />
+              // </ProtectedRoute>
             }
           />
           <Route
             path="/feedback"
             element={
-              <ProtectedRoute isAuthenticated={token}>
-                <Feedback
-                  token={token}
-                  handleToken={handleToken}
-                  userType={userType}
-                  username={username}
-                  handleLogout={handleLogout}
-                />
-              </ProtectedRoute>
+              // <ProtectedRoute isAuthenticated={token}>
+              <Feedback
+                token={token}
+                handleToken={handleToken}
+                userType={userType}
+                username={username}
+                handleLogout={handleLogout}
+              />
+              // </ProtectedRoute>
             }
           />
           <Route
             path="/ngonearby"
             element={
-              <ProtectedRoute isAuthenticated={token}>
-                <Ngonear
-                  token={token}
-                  handleToken={handleToken}
-                  userType={userType}
-                  username={username}
-                  handleLogout={handleLogout}
-                />
-              </ProtectedRoute>
+              // <ProtectedRoute isAuthenticated={token}>
+              <Ngonear
+                token={token}
+                handleToken={handleToken}
+                userType={userType}
+                username={username}
+                handleLogout={handleLogout}
+              />
+              // </ProtectedRoute>
             }
           />
           <Route
             path="/donate"
             element={
-              <ProtectedRoute isAuthenticated={token}>
-                <Donate
-                  token={token}
-                  handleToken={handleToken}
-                  userType={userType}
-                  username={username}
-                  handleLogout={handleLogout}
-                />
-              </ProtectedRoute>
+              // <ProtectedRoute isAuthenticated={token}>
+              <Donate
+                token={token}
+                handleToken={handleToken}
+                userType={userType}
+                username={username}
+                handleLogout={handleLogout}
+              />
+              // </ProtectedRoute>
             }
           />
-          {/* Admin-Specific Routes */}
+          Admin-Specific Routes
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute
-                isAuthenticated={token && userType === "admin-token"}
-              >
-                <Dashboard
-                  token={token}
-                  handleToken={handleToken}
-                  userType={userType}
-                  username={username}
-                  handleLogout={handleLogout}
-                />
-              </ProtectedRoute>
+              // <ProtectedRoute
+              //   isAuthenticated={token && userType === "admin-token"}
+              // >
+              <Dashboard
+                token={token}
+                handleToken={handleToken}
+                userType={userType}
+                username={username}
+                handleLogout={handleLogout}
+              />
+              // </ProtectedRoute>
             }
           />
           <Route
             path="/feedbackrequired"
             element={
-              <ProtectedRoute
-                isAuthenticated={token && userType === "admin-token"}
-              >
-                <FeedBackRecived
-                  token={token}
-                  handleToken={handleToken}
-                  userType={userType}
-                  username={username}
-                  handleLogout={handleLogout}
-                />
-              </ProtectedRoute>
+              // <ProtectedRoute
+              //   isAuthenticated={token && userType === "admin-token"}
+              // >
+              <FeedBackRecived
+                token={token}
+                handleToken={handleToken}
+                userType={userType}
+                username={username}
+                handleLogout={handleLogout}
+              />
+              // </ProtectedRoute>
             }
           />
           <Route
             path="/ngodetails"
             element={
-              <ProtectedRoute
-                isAuthenticated={token && userType === "admin-token"}
-              >
-                <Ngodetails
-                  token={token}
-                  handleToken={handleToken}
-                  userType={userType}
-                  username={username}
-                  handleLogout={handleLogout}
-                />
-              </ProtectedRoute>
+              // <ProtectedRoute
+              //   isAuthenticated={token && userType === "admin-token"}
+              // >
+              <Ngodetails
+                token={token}
+                handleToken={handleToken}
+                userType={userType}
+                username={username}
+                handleLogout={handleLogout}
+              />
+              // </ProtectedRoute>
             }
           />
           <Route
             path="/volunteerList"
             element={
-              <ProtectedRoute
-                isAuthenticated={token && userType === "admin-token"}
-              >
-                <VolunteerList
-                  token={token}
-                  handleToken={handleToken}
-                  userType={userType}
-                  username={username}
-                  handleLogout={handleLogout}
-                />
-              </ProtectedRoute>
+              // <ProtectedRoute
+              //   isAuthenticated={token && userType === "admin-token"}
+              // >
+              <VolunteerList
+                token={token}
+                handleToken={handleToken}
+                userType={userType}
+                username={username}
+                handleLogout={handleLogout}
+              />
+              // </ProtectedRoute>
             }
           />
-          {/* Volunteer-Specific Routes */}
+          Volunteer-Specific Routes
           <Route
             path="/profileVol"
             element={
-              <ProtectedRoute
-                isAuthenticated={token && userType === "volunteer-token"}
-              >
-                <Profile
-                  token={token}
-                  handleToken={handleToken}
-                  userType={userType}
-                  username={username}
-                  handleLogout={handleLogout}
-                />
-              </ProtectedRoute>
+              // <ProtectedRoute
+              //   isAuthenticated={token && userType === "volunteer-token"}
+              // >
+              <Profile
+                token={token}
+                handleToken={handleToken}
+                userType={userType}
+                username={username}
+                handleLogout={handleLogout}
+              />
+              // </ProtectedRoute>
             }
           />
           <Route
             path="/profileAdmin"
             element={
-              <ProtectedRoute
-                isAuthenticated={token && userType === "admin-token"}
-              >
-                <ProfileAdmin
-                  token={token}
-                  handleToken={handleToken}
-                  userType={userType}
-                  username={username}
-                  handleLogout={handleLogout}
-                />
-              </ProtectedRoute>
+              // <ProtectedRoute
+              //   isAuthenticated={token && userType === "admin-token"}
+              // >
+              <ProfileAdmin
+                token={token}
+                handleToken={handleToken}
+                userType={userType}
+                username={username}
+                handleLogout={handleLogout}
+              />
+              // </ProtectedRoute>
             }
           />
           <Route
             path="/volunteerDashboard"
             element={
-              <ProtectedRoute
-                isAuthenticated={token && userType === "volunteer-token"}
-              >
-                <DashboardVolunteer
-                  token={token}
-                  handleToken={handleToken}
-                  userType={userType}
-                  username={username}
-                  handleLogout={handleLogout}
-                />
-              </ProtectedRoute>
+              // <ProtectedRoute
+              //   isAuthenticated={token && userType === "volunteer-token"}
+              // >
+              <DashboardVolunteer
+                token={token}
+                handleToken={handleToken}
+                userType={userType}
+                username={username}
+                handleLogout={handleLogout}
+              />
+              //  </ProtectedRoute>
             }
           />
         </Routes>

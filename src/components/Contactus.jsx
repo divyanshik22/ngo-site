@@ -6,6 +6,11 @@ import { db } from "../firebase";
 import { addDoc, collection } from "firebase/firestore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import TopImage from "../images/BorderAnimal.png";
+import "./LoginAndSignUp.css";
+import Aboutus from "./Aboutus";
+import BottomBorder from "../images/BottomBorder.png";
+import axios from "axios";
 
 const Contactus = ({
   token,
@@ -92,6 +97,13 @@ const Contactus = ({
     }
 
     if (formIsValid) {
+      const response = await axios.post(`https://ngo-ri24.onrender.com/api/contact`, {
+        name: name,
+        email: email,
+        phone: phone,
+        message: message
+      });
+      console.log(response.data);
       toast.success("Thank you for contacting us", {
         position: "top-center",
         autoClose: 2000,
@@ -127,20 +139,21 @@ const Contactus = ({
         username={username}
         handleLogout={handleLogout}
       />
-
-      <Container className="mt-5">
+      <div style={{ position: "relative",margin:"70px 0px"}}>
+      <img src={TopImage} style={{ position: "absolute",top: -75,left: 50 }} />
+      <Container  style={{ backgroundColor: "#ffe7d3" , padding:"30px"}}>
         <Row className="justify-content-center">
           <Col md={6}>
-            <h2>Contact Us</h2>
+            <h2 style={{color:'#0F6465',textAlign:"center"}}>Contact Us</h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label htmlFor="name" className="form-label">
+                <label htmlFor="name" className="form-label" style={{color:'#0F6465'}}>
                   Name
                 </label>
                 <input
                   type="text"
                   id="name"
-                  className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                  className={`form-control ${errors.name ? "is-invalid" : ""} custom-input`}
                   placeholder="Enter your name"
                   value={name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
@@ -151,13 +164,13 @@ const Contactus = ({
               </div>
 
               <div className="mb-3">
-                <label htmlFor="email" className="form-label">
+                <label htmlFor="email" className="form-label" style={{color:'#0F6465'}}>
                   Email
                 </label>
                 <input
                   type="email"
                   id="email"
-                  className={`form-control ${errors.email ? "is-invalid" : ""}`}
+                  className={`form-control ${errors.email ? "is-invalid" : ""} custom-input`}
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
@@ -168,13 +181,13 @@ const Contactus = ({
               </div>
 
               <div className="mb-3">
-                <label htmlFor="phone" className="form-label">
+                <label htmlFor="phone" className="form-label" style={{color:'#0F6465'}}>
                   Phone
                 </label>
                 <input
                   type="tel"
                   id="phone"
-                  className={`form-control ${errors.phone ? "is-invalid" : ""}`}
+                  className={`form-control ${errors.phone ? "is-invalid" : ""} custom-input  `}
                   placeholder="Enter your phone number"
                   value={phone}
                   onChange={(e) => handleInputChange("phone", e.target.value)}
@@ -185,14 +198,14 @@ const Contactus = ({
               </div>
 
               <div className="mb-3">
-                <label htmlFor="message" className="form-label">
+                <label htmlFor="message" className="form-label" style={{color:'#0F6465'}}>
                   Message
                 </label>
                 <textarea
                   id="message"
                   className={`form-control ${
                     errors.message ? "is-invalid" : ""
-                  }`}
+                  } custom-input`}
                   rows="4"
                   placeholder="Enter your message"
                   value={message}
@@ -203,13 +216,17 @@ const Contactus = ({
                 )}
               </div>
 
-              <Button variant="primary" type="submit" className="mt-4">
+              <Button type="submit" className="mt-4 custom-button" >
                 Submit
               </Button>
             </form>
           </Col>
         </Row>
       </Container>
+      <img src={BottomBorder} style={{ position:"absolute",bottom:"-70px",right:"0px",width:"10%",height:"130px"}} />
+
+      </div>
+      <Aboutus />
       <ToastContainer />
     </>
   );

@@ -93,7 +93,7 @@ const NavbarVol = ({ token, handleToken, username, handleLogout }) => {
                 <Button
                   variant="info"
                   onClick={Loginbtn}
-                  className="btn-custom me-1"
+                  className="btn-custom mx-1"
                 >
                   Sign In
                 </Button>

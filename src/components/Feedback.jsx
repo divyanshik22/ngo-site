@@ -7,6 +7,11 @@ import { db } from "../firebase";
 import { addDoc, collection } from "firebase/firestore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import TopImage from "../images/BorderAnimal.png";
+import "./LoginAndSignUp.css";
+import Aboutus from "./Aboutus";
+import BottomBorder from "../images/BottomBorder.png";
+import axios from "axios";
 
 const Feedback = ({
   token,
@@ -63,6 +68,13 @@ const Feedback = ({
     });
 
     if (!nameError && !emailError && !ratingError && !feedbackError) {
+      const response = await axios.post(`https://ngo-ri24.onrender.com/api/feedback`, {
+        name: name,
+        email: email,
+        rating: rating,
+        feedback: feedback
+      });
+      console.log(response.data);
       try {
         toast.success("Thank you for the feedback", {
           position: "top-center",
@@ -107,20 +119,23 @@ const Feedback = ({
         username={username}
         handleLogout={handleLogout}
       />
-      <Container className="mt-5">
+      <div style={{ position: "relative",margin:"70px 0px"}}>
+      <img src={TopImage} style={{ position: "absolute",top: -75,left: 50 }} />
+      <Container style={{ backgroundColor: "#ffe7d3" , padding:"30px"}}>
         <Row className="justify-content-center">
           <Col md={6}>
-            <h2>Feedback Form</h2>
+            <h2 style={{color:'#0F6465',textAlign:"center"}}>Feedback Form</h2>
             <Form onSubmit={handleSubmit}>
               {/* Name Field */}
               <Form.Group controlId="formName">
-                <Form.Label>Name</Form.Label>
+                <Form.Label style={{color:'#0F6465'}}>Name</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Enter your name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   isInvalid={!!errors.name}
+                  className="custom-input"
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.name}
@@ -129,13 +144,14 @@ const Feedback = ({
 
               {/* Email Field */}
               <Form.Group controlId="formEmail" className="mt-3">
-                <Form.Label>Email</Form.Label>
+                <Form.Label style={{color:'#0F6465'}}>Email</Form.Label>
                 <Form.Control
                   type="email"
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   isInvalid={!!errors.email}
+                  className="custom-input"
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.email}
@@ -144,7 +160,7 @@ const Feedback = ({
 
               {/* Rating Field */}
               <Form.Group controlId="formRating" className="mt-3">
-                <Form.Label>Rating (1-5 Stars)</Form.Label>
+                <Form.Label style={{color:'#0F6465'}}>Rating (1-5 Stars)</Form.Label>
                 <div>
                   {[1, 2, 3, 4, 5].map((starValue) => (
                     <FaStar
@@ -152,7 +168,7 @@ const Feedback = ({
                       size={30}
                       color={starValue <= rating ? "#ffc107" : "#e4e5e9"}
                       onClick={() => handleStarClick(starValue)}
-                      style={{ cursor: "pointer", marginRight: 5 }}
+                      style={{ cursor: "pointer", marginRight: 5 ,backgroundColor:'#ffe7d3'}}
                     />
                   ))}
                 </div>
@@ -163,7 +179,7 @@ const Feedback = ({
 
               {/* Feedback Field */}
               <Form.Group controlId="formFeedback" className="mt-3">
-                <Form.Label>Feedback</Form.Label>
+                <Form.Label style={{color:'#0F6465'}}>Feedback</Form.Label>
                 <Form.Control
                   as="textarea"
                   rows={4}
@@ -171,19 +187,23 @@ const Feedback = ({
                   value={feedback}
                   onChange={(e) => setFeedback(e.target.value)}
                   isInvalid={!!errors.feedback}
+                  className="custom-input"      
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.feedback}
                 </Form.Control.Feedback>
               </Form.Group>
 
-              <Button variant="primary" type="submit" className="mt-4">
+              <Button className="mt-4 custom-button" type="submit" >
                 Submit
               </Button>
             </Form>
           </Col>
         </Row>
       </Container>
+      <img src={BottomBorder} style={{ position:"absolute",bottom:"-70px",right:"0px",width:"10%",height:"130px"}} />
+
+      </div>
       <ToastContainer />
     </>
   );

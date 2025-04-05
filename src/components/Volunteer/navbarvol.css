@@ -17,14 +17,15 @@
 }
 
 .navbar-custom .nav-link:hover {
-  color: #e0e0e0; /* Slight hover effect */
+  color: #e0e0e0;
 }
 
 /* Button styling */
 .navbar-custom .btn-custom {
-  background-color: white;
+  background-color: #ffe7d3;
   color: #0f6465;
-  border: none;
+  border: 1px solid #ffe7d3;
+  padding: 5px 10px;
 }
 
 .navbar-custom .btn-custom:hover {
