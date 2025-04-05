@@ -218,12 +218,12 @@ const HomePage = ({
 
 
 
-       <div className="holistic-approach">
+       <div >
         <div className="holistic-title">
           Volunteer Approach
         </div>
        <div
-          
+          className="holistic-approach"
           style={{
             display: 'grid',
             gridTemplateRows: 'repeat(6, 1fr)',  // 6 equal-height rows

@@ -478,10 +478,12 @@ h3 {
 }
 
 .holistic-title {
+  background-color: #ff7f50;
+  background-image: radial-gradient(circle at 10px 10px, rgba(255, 255, 255, 0.1) 2px, transparent 0),
+                    radial-gradient(circle at 25px 25px, rgba(255, 255, 255, 0.1) 2px, transparent 0);
   color: #fff;
   font-size: 2.5rem;
   font-weight: 600;
-  margin-bottom: 3rem;
   font-family: 'Poppins', sans-serif;
   position: relative;
   z-index: 2;
