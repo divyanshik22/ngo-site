@@ -47,10 +47,7 @@
 @media (max-width: 992px) {
   /* Target screens where the navbar collapses */
   .navbar-collapse {
-    display: flex; /* Enable flexbox for alignment */
-    flex-direction: column; /* Stack items vertically */
-    align-items: flex-start; /* Align items to the left (start) */
-    padding-left: 1rem; /* Add some padding for spacing from the edge */
+    padding: 0rem 1rem;
   }
 
   .nav-link {

@@ -70,9 +70,9 @@ const Aboutus = () => {
         <div className="col-md-4">
           <h5>Contact Us</h5>
           <ul className="list-unstyled">
-            <li>Email: support@company.com</li>
-            <li>Phone: +1 (123) 456-7890</li>
-            <li>Address: 123 Main Street, City, Country</li>
+            <li>Email: divyanshikesarwani12@gmail.com</li>
+            <li>Phone: +91 - 8126594633</li>
+            <li>Address: Delhi, India</li>
           </ul>
         </div>
       </div>
