@@ -36,6 +36,10 @@
   color: #0f6465 !important;
   border: 1px solid #0f6465 !important;
 }
+.radio-custom{
+  background-color: #ffe7d3 !important;
+  color: #0f6465 !important;
+}
 .custom-radio{
   color: #0f6465 !important;
 }
@@ -59,4 +63,18 @@
 /* Change label color */
 .custom-radio .form-check-label {
   color: #0F6465 !important; /* Green text */
+}
+
+.radio-label {
+  padding: 8px 16px;
+  border: 2px solid #0f6465;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #0f6465;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.radio-label.selected {
+  background-color: #0f6465;
+  color: white;
 }

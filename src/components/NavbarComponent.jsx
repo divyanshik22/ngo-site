@@ -13,11 +13,12 @@ const NavbarComponent = ({ token, handleToken, username, handleLogout }) => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
-
+  console.log(localStorage.getItem("token"),username,"Navbar")
   const navigate = useNavigate();
 
   const handleLogoutBtn = () => {
-    handleToken(false); // Clear token
+    handleToken(["" , "" , ""]); // Clear token
+    localStorage.removeItem("token");
     handleLogout();
     navigate("/");
   };
@@ -83,13 +84,13 @@ const NavbarComponent = ({ token, handleToken, username, handleLogout }) => {
             </Nav.Link>
           </Nav>
           <Nav>
-            {token ? (
+            {localStorage.getItem("token") ? (
               <Dropdown>
                 <Dropdown.Toggle className="btn-custom">
-                  {username}
+                {localStorage.getItem('usenamer')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu align="end">
-                  <Dropdown.Item as={Link} to="/profile">
+                  <Dropdown.Item as={Link} to="/profileVol">
                     Profile
                   </Dropdown.Item>
                   <Dropdown.Item onClick={handleLogoutBtn}>

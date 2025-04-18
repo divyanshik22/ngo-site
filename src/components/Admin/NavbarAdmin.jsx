@@ -22,7 +22,7 @@ const NavbarAdmin = ({
   const navigate = useNavigate();
 
   const handleLogoutBtn = () => {
-    handleToken(false); // Clear token
+    handleToken(["" , "" , ""]); // Clear token
     handleLogout();
   };
 

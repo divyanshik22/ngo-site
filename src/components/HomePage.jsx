@@ -140,7 +140,7 @@ const HomePage = ({
         <Container>
           <div className="row g-4">
             {cardData.map((card, index) => (
-              <div className='col-md-6 col-lg-3'>
+              <div className='col-md-6 col-lg-3' key={index}>
                 <div className="card h-90" style={{ border: "2px solid #ffe7d3" }}>
                   <div style={{ height: "200px", overflow: "hidden" }}>
                     <img src={card.image} alt="CardImage1" className="img-fluid w-100 h-100" style={{ objectFit: "cover" }} />

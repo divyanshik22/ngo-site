@@ -21,6 +21,7 @@ const Signup = ({ show, handleClose }) => {
     password: "",
     checkbox: "",
   });
+  const [responseError,setResponseError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,15 +70,15 @@ const Signup = ({ show, handleClose }) => {
     }
 
     if (formIsValid) {
-      const response = await axios.post(`https://ngo-ri24.onrender.com/api/auth/register`, {
-        name: username,
-        email: email,
-        password: password,
-        role: checkboxValue,
-        phone: phone,
-      });
-
       try {
+        const response = await axios.post(`https://ngo-ri24.onrender.com/api/auth/register`, {
+          name: username,
+          email: email,
+          password: password,
+          role: checkboxValue,
+          phone: phone,
+        });
+        console.log(response.data);
         toast.success("Thank you for registering with us!", {
           position: "top-center",
           autoClose: 2000,
@@ -87,20 +88,10 @@ const Signup = ({ show, handleClose }) => {
           draggable: true,
           theme: "light",
         });
-        await createUserWithEmailAndPassword(auth, email, password);
-        const user = auth.currentUser;
-        if (user) {
-          await setDoc(doc(db, "Users", user.uid), {
-            email: user.email,
-            username,
-            phone,
-            checkboxValue,
-            ...(checkboxValue === "Volunteer" ? { active: true } : {}),
-          });
-        }
+        handleClose();
       } catch (error) {
-        console.log(error.message);
-        toast.error("An error occurred while registering", {
+        setResponseError(error.response.data.error);
+        toast.error("Sign up Falied " + responseError, {
           position: "top-center",
           autoClose: 2000,
           hideProgressBar: false,
@@ -109,8 +100,13 @@ const Signup = ({ show, handleClose }) => {
           draggable: true,
           theme: "light",
         });
+        setUsername("");
+        setPhone("");
+        setEmail("");
+        setPassword("");
+        setCheckboxValue("");
       }
-      handleClose();
+      // handleClose();
     } else {
       setErrors(newErrors);
     }
@@ -157,14 +153,13 @@ const Signup = ({ show, handleClose }) => {
               </label>
               <input
                 type="text"
-                className={`form-control ${
-                  errors.username ? "is-invalid" : ""
-                }`}
+                className={`form-control ${errors.username ? "is-invalid" : ""
+                  } custom-input `}
                 id="username"
                 placeholder="Enter your username"
                 value={username}
                 onChange={(e) => handleInputChange("username", e.target.value)}
-                
+
               />
               {errors.username && (
                 <div className="invalid-feedback">{errors.username}</div>
@@ -177,12 +172,12 @@ const Signup = ({ show, handleClose }) => {
               </label>
               <input
                 type="text"
-                className={`form-control ${errors.phone ? "is-invalid" : ""}`}
+                className={`form-control ${errors.phone ? "is-invalid" : ""} custom-input`}
                 id="phone"
                 placeholder="Enter your phone number"
                 value={phone}
                 onChange={(e) => handleInputChange("phone", e.target.value)}
-              
+
               />
               {errors.phone && (
                 <div className="invalid-feedback">{errors.phone}</div>
@@ -191,18 +186,20 @@ const Signup = ({ show, handleClose }) => {
 
             <div className="mb-3">
               <label className="form-label">Sign Up As</label>
-              <div>
+              <div className="d-flex gap-3">
                 <input
                   type="radio"
                   id="user"
                   name="signupType"
                   value="user"
-                  checked={checkboxValue === "User"}
-                  onChange={(e) =>
-                    handleInputChange("checkbox", e.target.value)
-                  }
+                  checked={checkboxValue === "user"}
+                  onChange={(e) => handleInputChange("checkbox", e.target.value)}
+                  className="d-none"
                 />
-                <label htmlFor="user" className="ms-2 me-3">
+                <label
+                  htmlFor="user"
+                  className={`radio-label ${checkboxValue === "user" ? "selected" : ""}`}
+                >
                   User
                 </label>
 
@@ -211,12 +208,14 @@ const Signup = ({ show, handleClose }) => {
                   id="volunteer"
                   name="signupType"
                   value="volunteer"
-                  checked={checkboxValue === "Volunteer"}
-                  onChange={(e) =>
-                    handleInputChange("checkbox", e.target.value)
-                  }
+                  checked={checkboxValue === "volunteer"}
+                  onChange={(e) => handleInputChange("checkbox", e.target.value)}
+                  className="d-none"
                 />
-                <label htmlFor="volunteer" className="ms-2">
+                <label
+                  htmlFor="volunteer"
+                  className={`radio-label ${checkboxValue === "volunteer" ? "selected" : ""}`}
+                >
                   Volunteer
                 </label>
               </div>
@@ -232,12 +231,12 @@ const Signup = ({ show, handleClose }) => {
               </label>
               <input
                 type="email"
-                className={`form-control ${errors.email ? "is-invalid" : ""}`}
+                className={`form-control ${errors.email ? "is-invalid" : ""} custom-input`}
                 id="email"
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
-                
+
               />
               {errors.email && (
                 <div className="invalid-feedback">{errors.email}</div>
@@ -250,14 +249,13 @@ const Signup = ({ show, handleClose }) => {
               </label>
               <input
                 type="password"
-                className={`form-control ${
-                  errors.password ? "is-invalid" : ""
-                }`}
+                className={`form-control ${errors.password ? "is-invalid" : ""
+                  } custom-input`}
                 id="password"
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => handleInputChange("password", e.target.value)}
-                
+
               />
               {errors.password && (
                 <div className="invalid-feedback">{errors.password}</div>

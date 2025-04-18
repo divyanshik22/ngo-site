@@ -63,22 +63,26 @@ const Login = ({ show, handleClose, handleToken }) => {
           email: emailOrPhone,
           password: password,
         });
-
         // Handle successful login
-        console.log("Login successful:", response.data);
-        dispatch(login({ emailOrPhone, password }));
-        toast.success("Logged In", {
-          position: "top-center",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          theme: "light",
-        });
-        handleToken(true);
-        handleClose();
-        navigate("/");
+        console.log("Login successful:", response.data.data.role );
+        if(response.data.success === true){
+        
+
+          handleToken([response.data.token , response.data.data.role,response.data.data.name]);
+          toast.success("Logged In", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "light",
+          });
+          dispatch(login({ emailOrPhone, password }));
+          handleClose();
+          navigate("/");
+        }
+        
       } catch (error) {
         console.error("Error logging in:", error.message);
         toast.error("Username or password does not match", {
@@ -166,9 +170,17 @@ const Login = ({ show, handleClose, handleToken }) => {
             )}
 
             <div className="d-flex justify-content-around">
-              <Button type="submit" className="custom-button">
+              
+              {loading ? (
+               <Button type="submit" className="custom-button d-flex align-items-center justify-content-center gap-2" disabled>
+               <div className="spinner-border spinner-border-sm text-light" role="status"></div>
+               Logging in...
+             </Button>
+  ) : (
+    <Button type="submit" className="custom-button">
                 Sign In
               </Button>
+  )}
               <Button
                 type="submit"
                 onClick={() => setResetModalShow(true)}

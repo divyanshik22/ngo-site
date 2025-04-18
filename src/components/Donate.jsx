@@ -3,6 +3,9 @@ import Navbar from "./NavbarComponent";
 import LogIn from "./Login";
 import { Modal, Form, Button, Row, Col, Container } from "react-bootstrap";
 import { useEffect } from "react";
+import { QRCodeCanvas } from 'qrcode.react';
+
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
   FaPaw,
@@ -204,7 +207,13 @@ const Donate = ({
                         className="p-4 border-2 rounded"
                         style={{ borderColor: "#dc5705" }}
                       >
-                        <FaQrcode size={200} style={{ color: "#dc5705" }} />
+
+
+                        <QRCodeCanvas
+                          value="https://your-link-or-text.com"
+                          size={200}
+                          fgColor="#dc5705"
+                        />
                       </div>
                     </div>
                   </div>
