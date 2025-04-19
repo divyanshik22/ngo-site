@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "./Navbar/NavbarComponent";
-import "./common.css";
-import { db } from "../firebase"; // Adjust path to Firebase config
+import Navbar from "./../Navbar/NavbarComponent";
+import "./List.css";
+import { db } from "../../firebase"; // Adjust path to Firebase config
 import { collection, getDocs } from "firebase/firestore"; // Firebase methods
 import { Container, Table, Button } from "react-bootstrap";
 import axios from "axios";
 
-const Ngonear = ({
+const FeedbackRecived = ({
   token,
   userType,
   handleToken,
@@ -102,4 +102,4 @@ const Ngonear = ({
   );
 };
 
-export default React.memo(Ngonear);
+export default React.memo(FeedbackRecived);

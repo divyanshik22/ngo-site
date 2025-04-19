@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import Navbar from "./NavbarAdmin";
+import Navbar from "../Navbar/NavbarComponent";
 import { Container, Table, Button, Form, Modal, Nav } from "react-bootstrap";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import axios from "axios";

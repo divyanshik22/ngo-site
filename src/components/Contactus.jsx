@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import Navbar from "./NavbarComponent";
-import LogIn from "./Login";
+import Navbar from "./Navbar/NavbarComponent";
 import { Modal, Button, Row, Col, Container } from "react-bootstrap";
 import { db } from "../firebase";
 import { addDoc, collection } from "firebase/firestore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TopImage from "../images/BorderAnimal.png";
-import "./LoginAndSignUp.css";
-import Aboutus from "./Aboutus";
+import "./common.css";
+import Aboutus from "./About/Aboutus";
 import BottomBorder from "../images/BottomBorder.png";
 import axios from "axios";
+import FormContainer from "./Common/FormContainer";
 
 const Contactus = ({
   token,
@@ -131,23 +131,18 @@ const Contactus = ({
 
   return (
     <>
-      {showSignup && <LogIn show={showSignup} handleClose={handleClose} />}
-      <Navbar
-        token={token}
+      <FormContainer token={token}
         handleToken={handleToken}
-        handleUser={handleUser}
+        userType={userType}
         username={username}
-        handleLogout={handleLogout}
-      />
-      <div style={{ position: "relative",margin:"70px 0px"}}>
-      <img src={TopImage} style={{ position: "absolute",top: -75,left: 50 }} />
-      <Container  style={{ backgroundColor: "#ffe7d3" , padding:"30px"}}>
+        handleLogout={handleLogout}>
+
         <Row className="justify-content-center">
           <Col md={6}>
-            <h2 style={{color:'#0F6465',textAlign:"center"}}>Contact Us</h2>
+            <h2 style={{ color: '#0F6465', textAlign: "center" }}>Contact Us</h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label htmlFor="name" className="form-label" style={{color:'#0F6465'}}>
+                <label htmlFor="name" className="form-label" style={{ color: '#0F6465' }}>
                   Name
                 </label>
                 <input
@@ -164,7 +159,7 @@ const Contactus = ({
               </div>
 
               <div className="mb-3">
-                <label htmlFor="email" className="form-label" style={{color:'#0F6465'}}>
+                <label htmlFor="email" className="form-label" style={{ color: '#0F6465' }}>
                   Email
                 </label>
                 <input
@@ -181,7 +176,7 @@ const Contactus = ({
               </div>
 
               <div className="mb-3">
-                <label htmlFor="phone" className="form-label" style={{color:'#0F6465'}}>
+                <label htmlFor="phone" className="form-label" style={{ color: '#0F6465' }}>
                   Phone
                 </label>
                 <input
@@ -198,14 +193,13 @@ const Contactus = ({
               </div>
 
               <div className="mb-3">
-                <label htmlFor="message" className="form-label" style={{color:'#0F6465'}}>
+                <label htmlFor="message" className="form-label" style={{ color: '#0F6465' }}>
                   Message
                 </label>
                 <textarea
                   id="message"
-                  className={`form-control ${
-                    errors.message ? "is-invalid" : ""
-                  } custom-input`}
+                  className={`form-control ${errors.message ? "is-invalid" : ""
+                    } custom-input`}
                   rows="4"
                   placeholder="Enter your message"
                   value={message}
@@ -222,12 +216,8 @@ const Contactus = ({
             </form>
           </Col>
         </Row>
-      </Container>
-      <img src={BottomBorder} style={{ position:"absolute",bottom:"-70px",right:"0px",width:"10%",height:"130px"}} />
+      </FormContainer>
 
-      </div>
-      <Aboutus />
-      <ToastContainer />
     </>
   );
 };

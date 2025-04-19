@@ -1,25 +1,26 @@
 import React from "react";
 import { Carousel, Card, Row, Col, Container } from "react-bootstrap";
-import Navbar from "./NavbarComponent";
-import Aboutus from "./Aboutus";
-import Animal from "../images/Animal";
+import Navbar from "../Navbar/NavbarComponent";
+import Aboutus from "../About/Aboutus";
+import Animal from "../../images/Animal";
+import { Link, useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "./Homepage.css";
 import "leaflet/dist/leaflet.css";
 import { Icon } from "leaflet";
-import line_1 from "../images/line_1.png";
-import line_2 from "../images/line_2.png";
-import line_3 from "../images/line_3.png";
-import line_4 from "../images/line_4.png";
-import line_5 from "../images/line_5.png";
-import WorkDog from "../images/WorkDog.png";
-import Pet1 from "../images/Pet1.jpeg";
-import Pet2 from "../images/Pet2.jpeg";
-import Pet3 from "../images/Pet3.jpeg";
-import CardImage1 from "../images/CardImage1.jpeg";
-import CardImage2 from "../images/CardImage2.jpeg";
-import CardImage3 from "../images/CardImage3.jpeg";
-import CardImage4 from "../images/CardImage4.jpeg";
+import line_1 from "../../images/line_1.png";
+import line_2 from "../../images/line_2.png";
+import line_3 from "../../images/line_3.png";
+import line_4 from "../../images/line_4.png";
+import line_5 from "../../images/line_5.png";
+import WorkDog from "../../images/WorkDog.png";
+import Pet1 from "../../images/Pet1.jpeg";
+import Pet2 from "../../images/Pet2.jpeg";
+import Pet3 from "../../images/Pet3.jpeg";
+import CardImage1 from "../../images/CardImage1.jpeg";
+import CardImage2 from "../../images/CardImage2.jpeg";
+import CardImage3 from "../../images/CardImage3.jpeg";
+import CardImage4 from "../../images/CardImage4.jpeg";
 import { FaHandHoldingMedical, FaClinicMedical, FaRegAddressCard, FaHospital, FaHome, FaPaw } from 'react-icons/fa';
 
 const HomePage = ({
@@ -31,10 +32,10 @@ const HomePage = ({
   handleLogout,
 }) => {
   const customIcon = new Icon({
-    iconUrl: require("../images/pin-map.png"),
+    iconUrl: require("../../images/pin-map.png"),
     iconSize: [38, 38],
   });
-
+  const navigate = useNavigate();
   const markers = [
     {
       geocode: [23.393607, 76.132492],
@@ -202,6 +203,7 @@ const HomePage = ({
                         padding: "0.5rem 1.5rem",
                         borderRadius: "20px",
                       }}
+                      onClick={()=>{navigate("/donate")}}
                     >
                       Donate Now
                     </button>

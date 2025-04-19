@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../images/Logoo.png"; // Update path to your logo
+import logo from "../../images/Logoo.png"; // Update path to your logo
 import "./Aboutus.css";
 import { Link, useNavigate } from "react-router-dom";
 

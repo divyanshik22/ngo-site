@@ -40,6 +40,16 @@
   color: #0f6465;
   border: none;
 }
+.navbar-custom .btn-custom:hover {
+  background-color: #ffe7d3;
+  color: #0f6465;
+  border: 1px solid #ffe7d3;
+}
+.navbar-custom .btn-custom::after {
+  background-color: #ffe7d3;
+  color: #0f6465;
+  border: 1px solid #ffe7d3;
+}
 /* .navbar-collapse {
   align-items: flex-start;
 } */

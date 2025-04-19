@@ -5,8 +5,8 @@
 }
 
 .table th {
-  background-color: #0044cc;
-  color: white;
+  color: black;
+  border-bottom: 1px solid #D2691E;
 }
 
 .table tbody tr:hover {
@@ -26,4 +26,14 @@
 .btn-danger {
   background-color: #dc3545;
   border-color: #dc3545;
+}
+.ngo-container {
+  padding: 2rem;
+}
+
+.ngo-title {
+  color: #D2691E;
+  margin-bottom: 1.5rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
 }

@@ -6,19 +6,18 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import HomePage from "./components/HomePage";
+import HomePage from "./components/HomePage/HomePage";
 import HelpNeeded from "./components/Helpneeded";
 import Contactus from "./components/Contactus";
 import Feedback from "./components/Feedback";
 import Ngonear from "./components/Ngonear";
 import Donate from "./components/Donate";
-import Dashboard from "./components/Admin/Dashboard";
-import FeedBackRecived from "./components/Admin/FeedBackRecived";
-import DashboardVolunteer from "./components/Volunteer/Dashboard";
-import Profile from "./components/Volunteer/Profile";
-import ProfileAdmin from "./components/Admin/Profile";
-import Ngodetails from "./components/Admin/Ngodetails";
-import VolunteerList from "./components/Admin/VolunteerList";
+import Profile from "./components/Navbar/Profile";
+import ProfileAdmin from "./components/Common/Profile";
+import Ngodetails from "./components/Common/Ngodetails";
+import VolunteerList from "./components/Common/VolunteerList";
+import Contacted from "./components/Common/Contacted";
+import FeedbackRecived from "./components/Common/FeedbackRecived";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const ProtectedRoute = ({ isAuthenticated, children, redirectTo = "/" }) => {
@@ -47,6 +46,8 @@ const App = () => {
     if (!localStorage.getItem("token")) {
       localStorage.removeItem("token");
       localStorage.removeItem('usenamer');
+      localStorage.removeItem('usertype');
+      setUserType("");
       setToken("");
       setUserName("");
     }
@@ -57,6 +58,8 @@ const App = () => {
     setToken(newToken[0]);
     localStorage.setItem('token',newToken[0]);
     localStorage.setItem('usenamer',newToken[2]);
+    localStorage.setItem('userType',newToken[1]);
+
     setUserType(newToken[1]);
     setUserName(newToken[2]);
   };
@@ -66,6 +69,9 @@ const App = () => {
     setUserType("");
     setUserName("");
     localStorage.removeItem("token");
+      localStorage.removeItem('usenamer');
+      localStorage.removeItem('usertype');
+
   };
 
  
@@ -75,7 +81,6 @@ const App = () => {
       <Router>
         <Routes>
           Public Route
-          {(userType === "user" || userType === "") ? (
              <Route
              path="/"
              element={
@@ -88,34 +93,7 @@ const App = () => {
                />
              }
            />
-          ) : userType === "volunteer" ? (
-            <Route
-              path="/"
-              element={
-                <DashboardVolunteer
-                  token={token}
-                  handleToken={handleToken}
-                  userType={userType}
-                  username={username}
-                  handleLogout={handleLogout}
-                />
-              }
-            />
-          ) :  userType === "admin" ? (
-            <Route
-            path="/"
-            element={
-              <Dashboard
-                token={token}
-                handleToken={handleToken}
-                userType={userType}
-                username={username}
-                handleLogout={handleLogout}
-              />
-            }
-          />
-           
-          ): null}
+
           Protected Routes
           <Route
             path="/helpNeeded"
@@ -189,35 +167,35 @@ const App = () => {
           />
           Admin-Specific Routes
           <Route
-            path="/dashboard"
+            path="/contacted"
             element={
               <ProtectedRoute
                 isAuthenticated={token && userType === "admin-token"}
               >
-              <Dashboard
+              <Contacted
                 token={token}
                 handleToken={handleToken}
                 userType={userType}
                 username={username}
                 handleLogout={handleLogout}
               />
-              </ProtectedRoute>
+               </ProtectedRoute>
             }
           />
           <Route
-            path="/feedbackrequired"
+            path="/feebackrecived"
             element={
-              <ProtectedRoute
-                isAuthenticated={token && userType === "admin-token"}
-              >
-              <FeedBackRecived
+              // <ProtectedRoute
+              //   // isAuthenticated={token && userType === "admin-token"}
+              // >
+              <FeedbackRecived
                 token={token}
                 handleToken={handleToken}
                 userType={userType}
                 username={username}
                 handleLogout={handleLogout}
               />
-              </ProtectedRoute>
+              //  {/* </ProtectedRoute> */}
             }
           />
           <Route
@@ -256,9 +234,9 @@ const App = () => {
           <Route
             path="/profileVol"
             element={
-              // <ProtectedRoute
-              //   isAuthenticated={token && userType === "volunteer-token"}
-              // >
+              <ProtectedRoute
+                isAuthenticated={!!localStorage.getItem("token")}
+              >
               <Profile
                 token={token}
                 handleToken={handleToken}
@@ -266,7 +244,7 @@ const App = () => {
                 username={username}
                 handleLogout={handleLogout}
               />
-              //  </ProtectedRoute>
+               </ProtectedRoute>
             }
           />
           <Route
@@ -285,22 +263,7 @@ const App = () => {
              </ProtectedRoute>
             }
           />
-          <Route
-            path="/volunteerDashboard"
-            element={
-              <ProtectedRoute
-                isAuthenticated={token && userType === "volunteer-token"}
-              >
-              <DashboardVolunteer
-                token={token}
-                handleToken={handleToken}
-                userType={userType}
-                username={username}
-                handleLogout={handleLogout}
-              />
-              </ProtectedRoute>
-            }
-          />
+         
         </Routes>
       </Router>
     </>

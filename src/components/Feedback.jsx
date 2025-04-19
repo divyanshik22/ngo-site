@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import Navbar from "./NavbarComponent";
-import LogIn from "./Login";
+import Navbar from "./Navbar/NavbarComponent";
 import { Form, Button, Row, Col, Container } from "react-bootstrap";
 import { FaStar } from "react-icons/fa"; // Install react-icons : npm install react-icons
 import { db } from "../firebase";
@@ -8,10 +7,11 @@ import { addDoc, collection } from "firebase/firestore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TopImage from "../images/BorderAnimal.png";
-import "./LoginAndSignUp.css";
-import Aboutus from "./Aboutus";
+import "./common.css";
+import Aboutus from "./About/Aboutus";
 import BottomBorder from "../images/BottomBorder.png";
 import axios from "axios";
+import FormContainer from "./Common/FormContainer";
 
 const Feedback = ({
   token,
@@ -111,24 +111,19 @@ const Feedback = ({
 
   return (
     <>
-      {showSignup && <LogIn show={showSignup} handleClose={handleClose} />}
-      <Navbar
+      <FormContainer
         token={token}
         handleToken={handleToken}
-        handleUser={handleUser}
+        userType={userType}
         username={username}
-        handleLogout={handleLogout}
-      />
-      <div style={{ position: "relative",margin:"70px 0px"}}>
-      <img src={TopImage} style={{ position: "absolute",top: -75,left: 50 }} />
-      <Container style={{ backgroundColor: "#ffe7d3" , padding:"30px"}}>
+        handleLogout={handleLogout}>
         <Row className="justify-content-center">
           <Col md={6}>
-            <h2 style={{color:'#0F6465',textAlign:"center"}}>Feedback Form</h2>
+            <h2 style={{ color: '#0F6465', textAlign: "center" }}>Feedback Form</h2>
             <Form onSubmit={handleSubmit}>
               {/* Name Field */}
               <Form.Group controlId="formName">
-                <Form.Label style={{color:'#0F6465'}}>Name</Form.Label>
+                <Form.Label style={{ color: '#0F6465' }}>Name</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Enter your name"
@@ -144,7 +139,7 @@ const Feedback = ({
 
               {/* Email Field */}
               <Form.Group controlId="formEmail" className="mt-3">
-                <Form.Label style={{color:'#0F6465'}}>Email</Form.Label>
+                <Form.Label style={{ color: '#0F6465' }}>Email</Form.Label>
                 <Form.Control
                   type="email"
                   placeholder="Enter your email"
@@ -160,7 +155,7 @@ const Feedback = ({
 
               {/* Rating Field */}
               <Form.Group controlId="formRating" className="mt-3">
-                <Form.Label style={{color:'#0F6465'}}>Rating (1-5 Stars)</Form.Label>
+                <Form.Label style={{ color: '#0F6465' }}>Rating (1-5 Stars)</Form.Label>
                 <div>
                   {[1, 2, 3, 4, 5].map((starValue) => (
                     <FaStar
@@ -168,7 +163,7 @@ const Feedback = ({
                       size={30}
                       color={starValue <= rating ? "#ffc107" : "#e4e5e9"}
                       onClick={() => handleStarClick(starValue)}
-                      style={{ cursor: "pointer", marginRight: 5 ,backgroundColor:'#ffe7d3'}}
+                      style={{ cursor: "pointer", marginRight: 5, backgroundColor: '#ffe7d3' }}
                     />
                   ))}
                 </div>
@@ -179,7 +174,7 @@ const Feedback = ({
 
               {/* Feedback Field */}
               <Form.Group controlId="formFeedback" className="mt-3">
-                <Form.Label style={{color:'#0F6465'}}>Feedback</Form.Label>
+                <Form.Label style={{ color: '#0F6465' }}>Feedback</Form.Label>
                 <Form.Control
                   as="textarea"
                   rows={4}
@@ -187,7 +182,7 @@ const Feedback = ({
                   value={feedback}
                   onChange={(e) => setFeedback(e.target.value)}
                   isInvalid={!!errors.feedback}
-                  className="custom-input"      
+                  className="custom-input"
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.feedback}
@@ -200,11 +195,7 @@ const Feedback = ({
             </Form>
           </Col>
         </Row>
-      </Container>
-      <img src={BottomBorder} style={{ position:"absolute",bottom:"-70px",right:"0px",width:"10%",height:"130px"}} />
-
-      </div>
-      <ToastContainer />
+      </FormContainer>
     </>
   );
 };

@@ -7,7 +7,7 @@ import {
   InputGroup,
   Container,
 } from "react-bootstrap";
-import Navbar from "./NavbarAdmin";
+import Navbar from "../Navbar/NavbarComponent";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../firebase"; // Adjust path if needed
 

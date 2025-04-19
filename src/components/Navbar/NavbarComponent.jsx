@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from "../images/Logoo.png";
+import logo from "../../images/Logoo.png";
 import { Link, useNavigate } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -13,11 +13,10 @@ const NavbarComponent = ({ token, handleToken, username, handleLogout }) => {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
-  console.log(localStorage.getItem("token"),username,"Navbar")
   const navigate = useNavigate();
 
   const handleLogoutBtn = () => {
-    handleToken(["" , "" , ""]); // Clear token
+    handleToken(["", "", ""]); // Clear token
     localStorage.removeItem("token");
     handleLogout();
     navigate("/");
@@ -62,32 +61,48 @@ const NavbarComponent = ({ token, handleToken, username, handleLogout }) => {
           )}
         </Navbar.Toggle>
         <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="mx-auto">
-            <Nav.Link as={Link} to="/" className="nav-link">
-              Home
-            </Nav.Link>
+        <Nav className="mx-auto">
+         {(() => {
+      const userType = localStorage.getItem('userType') || '';
+      console.log(typeof(userType))
+      const commonLinks = [
+        { to: '/', label: 'Home' },
+      ];
 
-            <Nav.Link as={Link} to="/helpneeded" className="nav-link">
-              Help Needed
-            </Nav.Link>
-            <Nav.Link as={Link} to="/contactus" className="nav-link">
-              Contact Us
-            </Nav.Link>
-            <Nav.Link as={Link} to="/feedback" className="nav-link">
-              Feedback
-            </Nav.Link>
-            <Nav.Link as={Link} to="/donate" className="nav-link">
-              Donate
-            </Nav.Link>
-            <Nav.Link as={Link} to="/ngonearby" className="nav-link">
-              NGO Nearby
-            </Nav.Link>
-          </Nav>
-          <Nav>
+      const userLinks = [
+        { to: '/helpneeded', label: 'Help Needed' },
+        { to: '/contactus', label: 'Contact Us' },
+        { to: '/feedback', label: 'Feedback' },
+        { to: '/donate', label: 'Donate' },
+        { to: '/ngonearby', label: 'NGO Nearby' },
+      ];
+
+      const adminVolunteerLinks = [
+        { to: '/helpneeded', label: 'Help Required' },
+        { to: '/helpneeded', label: 'Contacted' },
+        { to: '/volunteerList', label: 'Volunteers' },
+        { to: '/feedbackrequired', label: 'Feedback Received' },
+        { to: '/donate', label: 'Item Donated' },
+        { to: '/ngodetails', label: 'Ngo Details' },
+      ];
+
+      const linksToRender = [
+        ...commonLinks,
+        ...(userType === 'admin' || userType === 'volunteer' ? adminVolunteerLinks : userLinks),
+      ];
+
+      return linksToRender.map(({ to, label }) => (
+        <Nav.Link key={to} as={Link} to={to} className="nav-link ms-3">
+          {label}
+        </Nav.Link>
+      ));
+    })()}
+  </Nav>
+  <Nav className="me-1">
             {localStorage.getItem("token") ? (
               <Dropdown>
                 <Dropdown.Toggle className="btn-custom">
-                {localStorage.getItem('usenamer')}
+                  {localStorage.getItem('usenamer')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu align="end">
                   <Dropdown.Item as={Link} to="/profileVol">
@@ -104,7 +119,7 @@ const NavbarComponent = ({ token, handleToken, username, handleLogout }) => {
                   Sign In
                 </Button>
                 <Button onClick={Signupbtn} className="btn-custom">
-                  Signup
+                  Sign Up
                 </Button>
               </>
             )}
@@ -118,7 +133,7 @@ const NavbarComponent = ({ token, handleToken, username, handleLogout }) => {
           handleToken={handleToken}
         />
       )}
-      {showSignup && <Signup show={showSignup} handleClose={handleClose} />}
+      {showSignup && <Signup show={showSignup} handleClose={handleClose} handleToken={handleToken} />}
     </>
   );
 };

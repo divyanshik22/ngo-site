@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../firebase";
+import { auth, db } from "../../firebase";
 import { setDoc, doc } from "firebase/firestore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./LoginAndSignUp.css";
 import axios from "axios";
 
-const Signup = ({ show, handleClose }) => {
+const Signup = ({ show, handleClose,handleToken }) => {
   const [username, setUsername] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -78,7 +78,7 @@ const Signup = ({ show, handleClose }) => {
           role: checkboxValue,
           phone: phone,
         });
-        console.log(response.data);
+        handleToken([response.data.token , response.data.data.role,response.data.data.name]);
         toast.success("Thank you for registering with us!", {
           position: "top-center",
           autoClose: 2000,

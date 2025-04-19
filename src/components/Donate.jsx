@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import Navbar from "./NavbarComponent";
-import LogIn from "./Login";
+import Navbar from "./Navbar/NavbarComponent";
 import { Modal, Form, Button, Row, Col, Container } from "react-bootstrap";
 import { useEffect } from "react";
 import { QRCodeCanvas } from 'qrcode.react';
@@ -74,7 +73,6 @@ const Donate = ({
 
   return (
     <>
-      {showSignup && <LogIn show={showSignup} handleClose={handleClose} />}
       <Navbar
         token={token}
         handleToken={handleToken}

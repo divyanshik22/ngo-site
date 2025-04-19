@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Modal, Form, Button, Row, Col, Container } from "react-bootstrap";
-import Navbar from "./NavbarComponent";
-import LogIn from "./Login";
+import Navbar from "./Navbar/NavbarComponent";
 import {
   MapContainer,
   TileLayer,
@@ -18,9 +17,11 @@ import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import TopImage from "../images/BorderAnimal.png";
-import "./LoginAndSignUp.css";
-import Aboutus from "./Aboutus";
+import "./common.css";
+import Aboutus from "./About/Aboutus";
 import BottomBorder from "../images/BottomBorder.png";
+import emailjs from '@emailjs/browser';
+import FormContainer from "./Common/FormContainer";
 const Helpneeded = ({
   token,
   userType,
@@ -39,6 +40,7 @@ const Helpneeded = ({
   const [volunteerLocation, setVolunteerLocation] = useState(null);
   const [route, setRoute] = useState([]);
   const mapRef = useRef();
+  const form = useRef();
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371; // Earth radius in km
@@ -125,8 +127,22 @@ const Helpneeded = ({
     shadowSize: [41, 41],
   });
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
     console.log(location);
+    e.preventDefault();
+
+    emailjs
+      .sendForm('service_j9djpim', 'template_4xo3889', form.current, {
+        publicKey: '6CTOn2FhRGqpR0cwc',
+      })
+      .then(
+        () => {
+          console.log('SUCCESS! Mail sent');
+        },
+        (error) => {
+          console.log('FAILED...', error.text);
+        },
+      );
     if (location) {
       findNearestVolunteer();
       setTracking(true);
@@ -177,25 +193,18 @@ const Helpneeded = ({
 
   return (
     <>
-      <Navbar
-        token={token}
+      <FormContainer token={token}
         handleToken={handleToken}
-        handleUser={handleUser}
+        userType={userType}
         username={username}
-        handleLogout={handleLogout}
-      />
-      <div style={{ position: "relative",margin:"70px 0px"}}>
-      <img src={TopImage} style={{ position: "absolute",top: -75,left: 50 }} />
-      <Container
-        style={{ backgroundColor: "#ffe7d3" , padding:"30px"}}
-      >
-        <h2 className="text-center mb-4" style={{color:'#0F6465'}}>Enter the Details</h2>
-        <Form>
+        handleLogout={handleLogout}>
+          <h2 className="text-center mb-4" style={{color:'#0F6465'}}>Enter the Details</h2>
+        <Form ref={form}>
           <Row className="mb-3">
             <Col>
               <Form.Group controlId="formName">
                 <Form.Label style={{color:'#0F6465'}}>Your Name</Form.Label>
-                <Form.Control type="text" placeholder="Enter your name"  className="custom-input"/>
+                <Form.Control type="text" placeholder="Enter your name" name="username"  className="custom-input"/>
               </Form.Group>
             </Col>
             <Col>
@@ -205,6 +214,7 @@ const Helpneeded = ({
                   type="text"
                   placeholder="Enter your phone number"
                   className="custom-input"
+                  name="phonenumber"
                 />
               </Form.Group>
             </Col>
@@ -213,7 +223,7 @@ const Helpneeded = ({
             <Col>
               <Form.Group controlId="formEmail">
                 <Form.Label style={{color:'#0F6465'}}>Email</Form.Label>
-                <Form.Control type="email" placeholder="Enter your email" className="custom-input"/>
+                <Form.Control type="email" placeholder="Enter your email" name="useremail" className="custom-input"/>
               </Form.Group>
             </Col>
           </Row>
@@ -225,6 +235,7 @@ const Helpneeded = ({
               rows={3}
               placeholder="Describe the problem"
               className="custom-input"
+              name="userstate"
             />
           </Form.Group>
 
@@ -285,10 +296,11 @@ const Helpneeded = ({
               placeholder="Selected location address"
               style={{ width: "100%", padding: "10px", marginTop: "10px" }}
               className="custom-input"
+              name="userlocation"
             />
           </Form.Group>
 
-          <Button onClick={()=>{handleSubmit();}} className="custom-button">
+          <Button onClick={(e)=>{handleSubmit(e);}} className="custom-button">
             Submit
           </Button>
         </Form>
@@ -316,12 +328,7 @@ const Helpneeded = ({
             </MapContainer>
           </>
         )}
-      </Container>
-
-      <img src={BottomBorder} style={{ position:"absolute",bottom:"-70px",right:"0px",width:"10%",height:"130px"}} />
-
-      </div>
-      <Aboutus />
+       </FormContainer>
     </>
   );
 };

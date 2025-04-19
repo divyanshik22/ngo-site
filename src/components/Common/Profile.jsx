@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import Navbar from "./NavbarVol";
+import Navbar from "../Navbar/NavbarComponent";
 import { db } from "../../firebase"; // Firebase import
 import { doc, updateDoc, collection, getDocs } from "firebase/firestore";
 import { useSelector } from "react-redux";

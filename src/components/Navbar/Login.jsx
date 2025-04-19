@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { login } from "./Redux/userSlice";
-import { auth } from "../firebase";
+
+import { login } from "../../Redux/userSlice";
+
+import { auth } from "../../firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
