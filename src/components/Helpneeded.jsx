@@ -562,7 +562,7 @@ setShowHistory}) =>{
   };
 return(
  <>
- <div className="d-flex justify-content-end mb-3">
+ {localStorage.getItem('token') && <div className="d-flex justify-content-end mb-3">
           <Button 
             variant="outline-primary"
             onClick={() => setShowHistory(true)}
@@ -575,7 +575,7 @@ return(
           >
             View Request History
           </Button>
-        </div>
+        </div>}
 
         {!tracking && !showHistory && <><h2 className="text-center mb-4" style={{color:'#0F6465'}}>Enter the Details</h2>
         <Form ref={form} noValidate>
@@ -777,7 +777,7 @@ const Helpneeded = ({
           />
         )}
         
-        {showHistory && (
+        {showHistory &&  (
           <RequestHistory 
             userType={userType}
             showHistory={showHistory}
