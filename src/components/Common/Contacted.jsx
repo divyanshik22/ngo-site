@@ -1,105 +1,108 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Navbar from "../Navbar/NavbarComponent";
+import { Container, Table, Button, Form, Modal, Nav, Card, InputGroup } from "react-bootstrap";
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import axios from "../../interceptors/axiosInterceptor";
 import "./List.css";
-import { db } from "../../firebase"; // Adjust path to Firebase config
-import { collection, getDocs } from "firebase/firestore"; // Firebase methods
-import { Container, Table, Button } from "react-bootstrap";
-import axios from "axios";
 
 const Contacted = ({
   token,
-  userType,
   handleToken,
-  handleUser,
+  userType,
   username,
   handleLogout,
 }) => {
-  const [showSignup, setShowSignup] = useState(false);
-  const [ngos, setNgos] = useState([]);
+  const [contact, setContact] = useState([]);
 
-  // Fetch NGO data from Firebase
+
+  // Fetch NGOs from Firebase
   useEffect(() => {
-    const fetchNgos = async () => {
-      try {
-
-        const querySnapshot = await getDocs(collection(db, "NgoDetails"));
-        const ngosList = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        console.log(ngosList);
-        setNgos(ngosList);
-      } catch (error) {
-        console.error("Error fetching NGOs:", error);
-      }
+    const fetchcontact = async () => {
+      console.log("Token",localStorage.getItem("token"))
+      const response = await axios.get(`https://ngo-ri24.onrender.com/api/contact`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      });
+      console.log(response.data.data)
+      setContact(response.data.data)
     };
-
-    fetchNgos();
+    fetchcontact();
   }, []);
 
-  const handleClose = () => {
-    setShowSignup(false);
-  };
+
 
   return (
     <>
-      {/* {showSignup && <LogIn show={showSignup} handleClose={handleClose} />} */}
       <Navbar
         token={token}
         handleToken={handleToken}
-        handleUser={handleUser}
         username={username}
         handleLogout={handleLogout}
       />
-
       <Container className="ngo-container">
-        <h2 className="ngo-title">NGOs Near You</h2>
-        <Table className="ngo-table" hover>
-          <thead>
-            <tr>
-              <th>NGO Name</th>
-              <th>Contact Email</th>
-              <th>Phone</th>
-              <th>Website</th>
-              <th>Rating</th>
-              <th>Location</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ngos.map((ngo) => (
-              <tr key={ngo.id}>
-                <td>{ngo.name}</td>
-                <td>{ngo.email}</td>
-                <td>{ngo.phone}</td>
-                <td>
-                  {ngo.website ? (
-                    <a href={ngo.website} target="_blank" rel="noopener noreferrer" style={{ color: '#D2691E' }}>
-                      Visit Website
-                    </a>
-                  ) : (
-                    'N/A'
-                  )}
-                </td>
-                <td>
-                  {ngo.reviews ? `${ngo.reviews} ⭐` : 'No reviews'}
-                </td>
-                <td>{ngo.location}</td>
-                <td>
-                  <Button className="ngo-view-btn">View Details</Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-        {ngos.length === 0 && (
-          <div className="text-center py-5" style={{ color: '#D2691E' }}>
-            <h4>Loading NGOs...</h4>
-          </div>
-        )}
+        <Card className="data-card">
+          <Card.Header>
+            <h2 className="mb-0">Contact Directory</h2>
+          </Card.Header>
+          <Card.Body>
+            <div className="mb-4">
+              <InputGroup className="search-input-group">
+                <InputGroup.Text>
+                  <i className="fas fa-search"></i>
+                </InputGroup.Text>
+                <Form.Control
+                  placeholder="Search contact..."
+                  // value={search}
+                  // onChange={(e) => setSearch(e.target.value)}
+                />
+              </InputGroup>
+            </div>
+
+            <div className="table-responsive">
+              <Table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Message</th>
+                    {localStorage.getItem("token") === 'admin' && <th>Action</th>}
+                  </tr>
+                </thead>
+                <tbody>
+                  {contact
+                    .map((contact) => (
+                      <tr key={contact.id}>
+                        <td>{contact?.name}</td>
+                        <td>{contact?.email}</td>
+                        <td>{contact?.phone}</td>
+                        <td>{contact?.message}</td>
+                        {localStorage.getItem("token") === 'admin' && <td>
+                            <Button
+                              className="action-btn"
+                              // onClick={() => handleDeletecontact(contact?.id)}
+                            >
+                              Delete
+                            </Button>
+                        </td>}
+                      </tr>
+                    ))}
+                </tbody>
+              </Table>
+            </div>
+
+            {contact?.length === 0 && (
+              <div className="text-center py-5">
+               
+                <h4 className="loading-text">Loading contacted...</h4>
+              </div>
+            )}
+          </Card.Body>
+        </Card>
       </Container>
     </>
   );
 };
 
-export default React.memo(Contacted);
+export default Contacted;

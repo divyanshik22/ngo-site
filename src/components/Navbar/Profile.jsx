@@ -11,7 +11,7 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import L from "leaflet";
-import axios from "axios";
+import axios from "../../interceptors/axiosInterceptor";
 import "leaflet/dist/leaflet.css";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
@@ -64,46 +64,92 @@ const Profile = ({
     );
   };
 
+  // useEffect(() => {
+  //   // Fetch volunteer data
+  //   const fetchVolunteer = async () => {
+      
+  //     if (!email) return;
+
+  //     try {
+  //       const response = await axios.get(
+  //         'https://ngo-ri24.onrender.com/api/auth/me',
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${localStorage.getItem("token")}`
+  //           }
+  //         }
+  //       );
+  //       setProfile({
+  //         firstName:response.data.data.name,
+  //         phone:response.data.data.phone,
+  //         email:response.data.data.email,
+  //         addressLine1:response.data.data.address,
+  //       })
+  //       console.log(profile,"responseeeeeeeeeeeeeeeeeeeeeee");
+
+  //       // const querySnapshot = await getDocs(collection(db, "Users"));
+  //       // const volunteersList = querySnapshot.docs.map((doc) => ({
+  //       //   id: doc.id,
+  //       //   ...doc.data(),
+  //       // }));
+
+  //       // const loggedInUser = volunteersList.find((vol) => vol.email === email);
+  //       // if (loggedInUser) {
+  //       //   setProfile({
+  //       //     id: loggedInUser.id || "",
+  //       //     firstName: loggedInUser.firstName || "",
+  //       //     lastName: loggedInUser.lastName || "",
+  //       //     phone: loggedInUser.phone || "",
+  //       //     addressLine1: loggedInUser.addressLine1 || "",
+  //       //     addressLine2: loggedInUser.addressLine2 || "",
+  //       //     postcode: loggedInUser.postcode || "",
+  //       //     state: loggedInUser.state || "",
+  //       //     area: loggedInUser.area || "",
+  //       //     email: loggedInUser.email || "",
+  //       //     location: loggedInUser.location || "",
+  //       //     country: loggedInUser.country || "",
+  //       //     region: loggedInUser.region || "",
+  //       //     active: loggedInUser.active || false,
+  //       //   });
+  //       //   setAddress(loggedInUser.location || "");
+  //       // }
+  //     } catch (error) {
+  //       console.error("Error fetching volunteer data:", error);
+  //     }
+  //   };
+
+  //   fetchVolunteer();
+  // }, [profile]);
   useEffect(() => {
-    // Fetch volunteer data
     const fetchVolunteer = async () => {
       if (!email) return;
-
+  
       try {
-        const querySnapshot = await getDocs(collection(db, "Users"));
-        const volunteersList = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
+        const response = await axios.get(
+          'https://ngo-ri24.onrender.com/api/auth/me',
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+          }
+        );
+  
+        setProfile((prev) => ({
+          ...prev,
+          firstName: response.data.data.name,
+          phone: response.data.data.phone,
+          email: response.data.data.email,
+          addressLine1: response.data.data.address,
         }));
-
-        const loggedInUser = volunteersList.find((vol) => vol.email === email);
-        if (loggedInUser) {
-          setProfile({
-            id: loggedInUser.id || "",
-            firstName: loggedInUser.firstName || "",
-            lastName: loggedInUser.lastName || "",
-            phone: loggedInUser.phone || "",
-            addressLine1: loggedInUser.addressLine1 || "",
-            addressLine2: loggedInUser.addressLine2 || "",
-            postcode: loggedInUser.postcode || "",
-            state: loggedInUser.state || "",
-            area: loggedInUser.area || "",
-            email: loggedInUser.email || "",
-            location: loggedInUser.location || "",
-            country: loggedInUser.country || "",
-            region: loggedInUser.region || "",
-            active: loggedInUser.active || false,
-          });
-          setAddress(loggedInUser.location || "");
-        }
+  
+        console.log(response.data.data, "responseeeeeeeeeeeeeeeeeeeeeee");
       } catch (error) {
         console.error("Error fetching volunteer data:", error);
       }
     };
-
+  
     fetchVolunteer();
   }, [email]);
-
   const handleSaveProfile = async () => {
     try {
       const updatedProfile = {
@@ -255,7 +301,7 @@ const Profile = ({
               <div>
                 <button
                   className="btn btn-secondary"
-                  type="button"
+                  type="submit"
                   onClick={handleLocateMe}
                   disabled={!isEditing}
                 >

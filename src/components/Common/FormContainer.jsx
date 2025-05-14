@@ -9,7 +9,7 @@ import TopImage from "../../images/BorderAnimal.png";
 import "./FormContainer.css";
 import Aboutus from "./../About/Aboutus";
 import BottomBorder from "../../images/BottomBorder.png";
-import axios from "axios";
+import axios from "../../interceptors/axiosInterceptor";
 
 const FormContainer = ({
   token,

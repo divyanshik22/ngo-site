@@ -1,7 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import Navbar from "../Navbar/NavbarComponent";
-import { db } from "../../firebase"; // Firebase import
-import { doc, updateDoc, collection, getDocs } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import {
   MapContainer,
@@ -11,12 +8,13 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import L from "leaflet";
-import axios from "axios";
+import axios from "../../interceptors/axiosInterceptor";
 import "leaflet/dist/leaflet.css";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import Navbar from "../Navbar/NavbarComponent";
 
-const Profile = ({
+const ProfileAdmin = ({
   token,
   userType,
   handleToken,
@@ -24,26 +22,9 @@ const Profile = ({
   username,
   handleLogout,
 }) => {
-  const [profile, setProfile] = useState({
-    id: "",
-    firstName: "",
-    lastName: "",
-    phone: "",
-    addressLine1: "",
-    addressLine2: "",
-    postcode: "",
-    state: "",
-    area: "",
-    email: "",
-    location: "",
-    lat: null, // Latitude
-    lng: null,
-    country: "",
-    region: "",
-    active: false, // Active status
-  });
+  const [profile, setProfile] = useState([]);
 
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(0);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [address, setAddress] = useState("");
   const email = useSelector((state) => state.user.currentUser?.email); // Redux for email
@@ -67,58 +48,76 @@ const Profile = ({
   useEffect(() => {
     // Fetch volunteer data
     const fetchVolunteer = async () => {
-      if (!email) return;
-
+      // if (!email) return;
+    
       try {
-        const querySnapshot = await getDocs(collection(db, "Users"));
-        const volunteersList = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        const loggedInUser = volunteersList.find((vol) => vol.email === email);
-        if (loggedInUser) {
-          setProfile({
-            id: loggedInUser.id || "",
-            firstName: loggedInUser.firstName || "",
-            lastName: loggedInUser.lastName || "",
-            phone: loggedInUser.phone || "",
-            addressLine1: loggedInUser.addressLine1 || "",
-            addressLine2: loggedInUser.addressLine2 || "",
-            postcode: loggedInUser.postcode || "",
-            state: loggedInUser.state || "",
-            area: loggedInUser.area || "",
-            email: loggedInUser.email || "",
-            location: loggedInUser.location || "",
-            country: loggedInUser.country || "",
-            region: loggedInUser.region || "",
-            active: loggedInUser.active || false,
-          });
-          setAddress(loggedInUser.location || "");
+        const response = await axios.get(
+          'https://ngo-ri24.onrender.com/api/auth/me',
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+          }
+        );
+        console.log(response.data.data,"responseeeeeeeeeeeeeeeeeeeeeee");
+        setProfile(response.data.data)
+        setAddress(response?.data?.data?.location || "");
         }
-      } catch (error) {
+      catch (error) {
         console.error("Error fetching volunteer data:", error);
       }
     };
 
     fetchVolunteer();
-  }, [email]);
+  }, []);
 
   const handleSaveProfile = async () => {
     try {
+      console.log("Starting profile update...");
+      console.log("Selected location:", selectedLocation);
+      console.log("Current profile:", profile);
+      
       const updatedProfile = {
-        ...profile,
-        location: address || profile.location,
-        lat: selectedLocation?.lat || profile.lat, // Save latitude
-        lng: selectedLocation?.lng || profile.lng, // Save longitude
+        name: profile.name,
+        email: profile.email,
+        phone: profile.phone,
+        role: profile.role,
+        address: {
+          street: profile.address?.street || "",
+          city: profile.address?.city || "",
+          state: profile.address?.state || "",
+          zipCode: profile.address?.zipCode || "",
+          country: profile.address?.country || "",
+          latitude: selectedLocation?.lat?.toString() || profile.address?.latitude || "",
+          longitude: selectedLocation?.lng?.toString() || profile.address?.longitude || ""
+        }
       };
 
-      const userRef = doc(db, "Users", profile.id);
-      await updateDoc(userRef, updatedProfile);
-      console.log("Profile updated successfully:", updatedProfile);
-      setIsEditing(false);
+      console.log("Updated profile data:", updatedProfile);
+      
+      const response = await axios.put(
+        `https://ngo-ri24.onrender.com/api/users/${profile._id}`,
+        updatedProfile,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      if (response.data.success) {
+        console.log("Profile updated successfully via API");
+        setProfile(response.data.data);
+        setIsEditing(0);
+        setShowMap(false);
+        console.log("isEditing set to 0");
+      } else {
+        throw new Error(response.data.error || 'Failed to update profile');
+      }
     } catch (error) {
       console.error("Error updating profile:", error);
+      console.error("Error details:", error.message);
     }
   };
 
@@ -183,7 +182,7 @@ const Profile = ({
                 alt="Profile"
               />
               <span className="font-weight-bold">
-                {profile.firstName} {profile.lastName}
+                {profile.name} {profile.lastName}
               </span>
               <span className="text-black-50">{profile.email}</span>
             </div>
@@ -198,7 +197,7 @@ const Profile = ({
                     type="text"
                     className="form-control"
                     name="firstName"
-                    value={profile.firstName}
+                    value={profile.name}
                     onChange={(e) =>
                       setProfile({ ...profile, firstName: e.target.value })
                     }
@@ -289,7 +288,7 @@ const Profile = ({
                   className="btn btn-primary profile-button"
                   type="button"
                   onClick={
-                    isEditing ? handleSaveProfile : () => setIsEditing(true)
+                    isEditing ? handleSaveProfile : () => setIsEditing(1)
                   }
                 >
                   {isEditing ? "Save Profile" : "Edit Profile"}
@@ -303,4 +302,4 @@ const Profile = ({
   );
 };
 
-export default Profile;
+export default ProfileAdmin;

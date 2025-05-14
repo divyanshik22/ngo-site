@@ -10,7 +10,7 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import L from "leaflet";
-import axios from "axios";
+import axios from "../interceptors/axiosInterceptor";
 import "leaflet/dist/leaflet.css";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
@@ -300,7 +300,7 @@ const Helpneeded = ({
             />
           </Form.Group>
 
-          <Button onClick={(e)=>{handleSubmit(e);}} className="custom-button">
+          <Button type="submit" onClick={(e)=>{handleSubmit(e);}} className="custom-button">
             Submit
           </Button>
         </Form>

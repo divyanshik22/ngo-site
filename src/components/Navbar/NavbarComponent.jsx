@@ -78,10 +78,10 @@ const NavbarComponent = ({ token, handleToken, username, handleLogout }) => {
       ];
 
       const adminVolunteerLinks = [
-        { to: '/helpneeded', label: 'Help Required' },
-        { to: '/helpneeded', label: 'Contacted' },
+        { to: '/helprequestList', label: 'Help Required' },
+        { to: '/contacted', label: 'Contacted' },
         { to: '/volunteerList', label: 'Volunteers' },
-        { to: '/feedbackrequired', label: 'Feedback Received' },
+        { to: '/feebackrecived', label: 'Feedback Received' },
         { to: '/donate', label: 'Item Donated' },
         { to: '/ngodetails', label: 'Ngo Details' },
       ];
@@ -105,9 +105,12 @@ const NavbarComponent = ({ token, handleToken, username, handleLogout }) => {
                   {localStorage.getItem('usenamer')}
                 </Dropdown.Toggle>
                 <Dropdown.Menu align="end">
-                  <Dropdown.Item as={Link} to="/profileVol">
+                  {localStorage.getItem("userType") === 'admin' || localStorage.getItem("userType") === 'volunteer' ? <Dropdown.Item as={Link} to="/profileAdmin">
                     Profile
-                  </Dropdown.Item>
+                  </Dropdown.Item>: <Dropdown.Item as={Link} to="/profileVol">
+                    Profile
+                  </Dropdown.Item>}
+                  
                   <Dropdown.Item onClick={handleLogoutBtn}>
                     Logout
                   </Dropdown.Item>

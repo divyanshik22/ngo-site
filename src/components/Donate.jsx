@@ -86,7 +86,7 @@ const Donate = ({
           className="position-relative py-5"
           style={{ backgroundColor: "#dc5705" }}
         >
-          <div className="container text-white py-5">
+          <div className="container text-white py-5" style={{ backgroundColor: "#dc5705" }}>
             <div className="row justify-content-center text-center">
               <div className="col-lg-8">
                 <FaPaw className="display-1 mb-4" />

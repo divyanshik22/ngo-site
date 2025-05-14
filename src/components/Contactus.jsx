@@ -9,7 +9,7 @@ import TopImage from "../images/BorderAnimal.png";
 import "./common.css";
 import Aboutus from "./About/Aboutus";
 import BottomBorder from "../images/BottomBorder.png";
-import axios from "axios";
+import axiosInstance from '../interceptors/axiosInterceptor';
 import FormContainer from "./Common/FormContainer";
 
 const Contactus = ({
@@ -97,33 +97,37 @@ const Contactus = ({
     }
 
     if (formIsValid) {
-      const response = await axios.post(`https://ngo-ri24.onrender.com/api/contact`, {
-        name: name,
-        email: email,
-        phone: phone,
-        message: message
-      });
-      console.log(response.data);
-      toast.success("Thank you for contacting us", {
-        position: "top-center",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "light",
-      });
-      setName("");
-      setEmail("");
-      setPhone("");
-      setMessage("");
+      try {
+        const response = await axiosInstance.post(`https://ngo-ri24.onrender.com/api/contact`, {
+          name: name,
+          email: email,
+          phone: phone,
+          message: message
+        });
+        console.log(response.data);
+        toast.success("Thank you for contacting us", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "light",
+        });
+        setName("");
+        setEmail("");
+        setPhone("");
+        setMessage("");
 
-      await addDoc(collection(db, "ContactUs"), {
-        name,
-        email,
-        phone,
-        message,
-      });
+        await addDoc(collection(db, "ContactUs"), {
+          name,
+          email,
+          phone,
+          message,
+        });
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      }
     } else {
       setErrors(newErrors);
     }
@@ -210,7 +214,11 @@ const Contactus = ({
                 )}
               </div>
 
-              <Button type="submit" className="mt-4 custom-button" >
+              <Button 
+                type="submit" 
+                className="mt-4 custom-button" 
+                style={{ minWidth: '120px' }}
+              >
                 Submit
               </Button>
             </form>

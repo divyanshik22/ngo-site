@@ -6,7 +6,7 @@ import { setDoc, doc } from "firebase/firestore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./LoginAndSignUp.css";
-import axios from "axios";
+import axios from "../../interceptors/axiosInterceptor";
 
 const Signup = ({ show, handleClose,handleToken }) => {
   const [username, setUsername] = useState("");
@@ -22,6 +22,7 @@ const Signup = ({ show, handleClose,handleToken }) => {
     checkbox: "",
   });
   const [responseError,setResponseError] = useState("");
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -71,6 +72,7 @@ const Signup = ({ show, handleClose,handleToken }) => {
 
     if (formIsValid) {
       try {
+
         const response = await axios.post(`https://ngo-ri24.onrender.com/api/auth/register`, {
           name: username,
           email: email,
@@ -263,9 +265,12 @@ const Signup = ({ show, handleClose,handleToken }) => {
             </div>
 
             <div className="text-center">
-              <Button type="submit" className="custom-button">
-                Register
-              </Button>
+          
+                <Button type="submit" className="custom-button">
+                  Register
+
+                </Button>
+              
             </div>
           </form>
         </Modal.Body>

@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Reset from "./Reset";
 import "./LoginAndSignUp.css";
 import { useEffect } from "react";
-import axios from "axios";
+import axios from "../../interceptors/axiosInterceptor";
 import { Spinner } from "react-bootstrap";
 
 const Login = ({ show, handleClose, handleToken }) => {
@@ -24,7 +24,6 @@ const Login = ({ show, handleClose, handleToken }) => {
     password: "",
     authError: "", // Added to show authentication error
   });
-  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -58,7 +57,6 @@ const Login = ({ show, handleClose, handleToken }) => {
     }
 
     if (formIsValid) {
-      setLoading(true);
       try {
         // Make a POST request to the login endpoint
         const response = await axios.post(`https://ngo-ri24.onrender.com/api/auth/login`, {
@@ -173,16 +171,11 @@ const Login = ({ show, handleClose, handleToken }) => {
 
             <div className="d-flex justify-content-around">
               
-              {loading ? (
-               <Button type="submit" className="custom-button d-flex align-items-center justify-content-center gap-2" disabled>
-               <div className="spinner-border spinner-border-sm text-light" role="status"></div>
-               Logging in...
-             </Button>
-  ) : (
-    <Button type="submit" className="custom-button">
-                Sign In
-              </Button>
-  )}
+              
+                <Button type="submit" className="custom-button">
+                  Sign In
+                </Button>
+              
               <Button
                 type="submit"
                 onClick={() => setResetModalShow(true)}

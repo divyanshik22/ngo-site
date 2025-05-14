@@ -10,7 +10,7 @@ import TopImage from "../images/BorderAnimal.png";
 import "./common.css";
 import Aboutus from "./About/Aboutus";
 import BottomBorder from "../images/BottomBorder.png";
-import axios from "axios";
+import axios from "../interceptors/axiosInterceptor";
 import FormContainer from "./Common/FormContainer";
 
 const Feedback = ({
