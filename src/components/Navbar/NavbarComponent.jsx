@@ -71,7 +71,7 @@ const NavbarComponent = ({ token, handleToken, username, handleLogout }) => {
 
       const userLinks = [
         { to: '/helpneeded', label: 'Help Needed' },
-        { to: '/contactus', label: 'Contact Us' },
+        { to: '/contactus', label: 'Reach Out To Us' },
         { to: '/feedback', label: 'Feedback' },
         { to: '/donate', label: 'Donate' },
         { to: '/ngonearby', label: 'NGO Nearby' },

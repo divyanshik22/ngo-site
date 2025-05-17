@@ -24,7 +24,6 @@ import "react-toastify/dist/ReactToastify.css";
 import axiosInstance from './interceptors/axiosInterceptor';
 
 const ProtectedRoute = ({ isAuthenticated, children, redirectTo = "/" }) => {
-  console.log(isAuthenticated,"asdfghjkl")
   if (!isAuthenticated) {
     toast.error("You need to log in to access this page!", {
       position: "top-center",
@@ -174,63 +173,63 @@ const App = () => {
             path="/contacted"
             element={
               <ProtectedRoute
-                isAuthenticated={localStorage.getItem("token") && localStorage.getItem("userType") === "admin"}
+                isAuthenticated={localStorage.getItem("token") && (localStorage.getItem("userType") === "admin" || localStorage.getItem("userType") === "volunteer")}
               >
-              <Contacted
-                token={token}
-                handleToken={handleToken}
-                userType={userType}
-                username={username}
-                handleLogout={handleLogout}
-              />
-               </ProtectedRoute>
+                <Contacted
+                  token={token}
+                  handleToken={handleToken}
+                  userType={userType}
+                  username={username}
+                  handleLogout={handleLogout}
+                />
+              </ProtectedRoute>
             }
           />
           <Route
             path="/feebackrecived"
             element={
               <ProtectedRoute
-                isAuthenticated={localStorage.getItem("token") && localStorage.getItem("userType") === "admin"}
+                isAuthenticated={localStorage.getItem("token") && (localStorage.getItem("userType") === "admin" || localStorage.getItem("userType") === "volunteer")}
               >
-              <FeedbackRecived
-                token={token}
-                handleToken={handleToken}
-                userType={userType}
-                username={username}
-                handleLogout={handleLogout}
-              />
-               </ProtectedRoute>
+                <FeedbackRecived
+                  token={token}
+                  handleToken={handleToken}
+                  userType={userType}
+                  username={username}
+                  handleLogout={handleLogout}
+                />
+              </ProtectedRoute>
             }
           />
           <Route
             path="/ngodetails"
             element={
               <ProtectedRoute
-                isAuthenticated={localStorage.getItem("token") && localStorage.getItem("userType") === "admin"}
+                isAuthenticated={localStorage.getItem("token") && (localStorage.getItem("userType") === "admin" || localStorage.getItem("userType") === "volunteer")}
               >
-              <Ngodetails
-                token={token}
-                handleToken={handleToken}
-                userType={userType}
-                username={username}
-                handleLogout={handleLogout}
-              />
-               </ProtectedRoute>
+                <Ngodetails
+                  token={token}
+                  handleToken={handleToken}
+                  userType={userType}
+                  username={username}
+                  handleLogout={handleLogout}
+                />
+              </ProtectedRoute>
             }
           />
           <Route
             path="/volunteerList"
             element={
               <ProtectedRoute
-                isAuthenticated={localStorage.getItem("token") && localStorage.getItem("userType") === "admin"}
+                isAuthenticated={localStorage.getItem("token") && (localStorage.getItem("userType") === "admin" || localStorage.getItem("userType") === "volunteer")}
               >
-              <VolunteerList
-                token={token}
-                handleToken={handleToken}
-                userType={userType}
-                username={username}
-                handleLogout={handleLogout}
-              />
+                <VolunteerList
+                  token={token}
+                  handleToken={handleToken}
+                  userType={userType}
+                  username={username}
+                  handleLogout={handleLogout}
+                />
               </ProtectedRoute>
             }
           />
@@ -238,15 +237,15 @@ const App = () => {
             path="/helprequestList"
             element={
               <ProtectedRoute
-                isAuthenticated={localStorage.getItem("token") && localStorage.getItem("userType") === "admin"}
+                isAuthenticated={localStorage.getItem("token") && (localStorage.getItem("userType") === "admin" || localStorage.getItem("userType") === "volunteer")}
               >
-              <HelpRequest
-                token={token}
-                handleToken={handleToken}
-                userType={userType}
-                username={username}
-                handleLogout={handleLogout}
-              />
+                <HelpRequest
+                  token={token}
+                  handleToken={handleToken}
+                  userType={userType}
+                  username={username}
+                  handleLogout={handleLogout}
+                />
               </ProtectedRoute>
             }
           />
@@ -271,7 +270,7 @@ const App = () => {
             path="/profileAdmin"
             element={
               <ProtectedRoute
-                isAuthenticated={localStorage.getItem("token") && localStorage.getItem("userType") === "admin"}
+                isAuthenticated={localStorage.getItem("token") && localStorage.getItem("userType") === "admin" && localStorage.getItem("userType") === "volunteer"}
               >
               <ProfileAdmin
                 token={token}

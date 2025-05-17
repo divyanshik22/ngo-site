@@ -3,7 +3,8 @@ import Navbar from "./Navbar/NavbarComponent";
 import { Modal, Form, Button, Row, Col, Container } from "react-bootstrap";
 import { useEffect } from "react";
 import { QRCodeCanvas } from 'qrcode.react';
-
+import { useNavigate } from 'react-router-dom';
+import Aboutus from "./About/Aboutus";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
@@ -23,6 +24,8 @@ const Donate = ({
   username,
   handleLogout,
 }) => {
+  const navigate = useNavigate();
+
   useEffect(() => {
     // Initialize Bootstrap JavaScript
     import("bootstrap/dist/js/bootstrap.bundle.min.js");
@@ -71,6 +74,10 @@ const Donate = ({
     setShowSignup(true);
   };
 
+  const handleLearnMore = () => {
+    navigate('/');
+  };
+
   return (
     <>
       <Navbar
@@ -100,7 +107,7 @@ const Donate = ({
                   <button className="btn btn-light btn-lg px-4">
                     Donate Now
                   </button>
-                  <button className="btn btn-outline-light btn-lg px-4">
+                  <button className="btn btn-outline-light btn-lg px-4" onClick={handleLearnMore}>
                     Learn More
                   </button>
                 </div>
@@ -139,7 +146,7 @@ const Donate = ({
           </div>
         </div>
 
-        {/* Donation Options */}
+        {/* Donation Options
         <div className="container py-5">
           <h2 className="text-center display-5 mb-5">Choose Your Impact</h2>
           <div className="row g-4">
@@ -181,7 +188,7 @@ const Donate = ({
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
 
         {/* QR Code Section */}
         <div className="py-5" style={{ backgroundColor: "#fff8f3" }}>
@@ -220,6 +227,7 @@ const Donate = ({
             </div>
           </div>
         </div>
+        <Aboutus />
 
         <style>
           {`

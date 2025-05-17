@@ -94,12 +94,17 @@
     position: absolute;
     bottom:-70px;
     right:0px;
-    width:10%;
+    width:auto;
     height:130px;
   }
+  .TopBorder{
+    position: absolute;
+    top: -75px;
+    left: 50px;
+  }
 
-  @media (max-width: 350px){
-    .BottomBorder{
-      width: 40%;
+  @media (max-width: 390px){
+    .TopBorder{
+      left: 25%;
     }
   }

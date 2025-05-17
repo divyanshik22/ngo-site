@@ -34,7 +34,7 @@ const FormContainer = ({
         handleLogout={handleLogout}
       />
       <div style={{ position: "relative",margin:"70px 0px"}}>
-      <img src={TopImage} style={{ position: "absolute",top: -75,left: 50 }} />
+      <img src={TopImage} className="TopBorder" />
       <Container  style={{ backgroundColor: "#ffe7d3" , padding:"30px"}}>
         {children}
       </Container>

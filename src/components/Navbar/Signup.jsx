@@ -92,7 +92,7 @@ const Signup = ({ show, handleClose,handleToken }) => {
         });
         handleClose();
       } catch (error) {
-        setResponseError(error.response.data.error);
+        setResponseError(error?.response?.data?.error || " ");
         toast.error("Sign up Falied " + responseError, {
           position: "top-center",
           autoClose: 2000,

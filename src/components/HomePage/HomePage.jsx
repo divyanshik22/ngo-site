@@ -147,7 +147,7 @@ const HomePage = ({
                     <img src={card.image} alt="CardImage1" className="img-fluid w-100 h-100" style={{ objectFit: "cover" }} />
                   </div>
                   <div className="card-body h-25">
-                    <h3 style={{ color: "#D2691E" }}>{card.title}</h3>
+                    <h2 style={{ color: "#D2691E" }}>{card.title}</h2>
                     <p style={{ color: "#D2691E" }}>{card.text}</p>
                   </div>
                 </div>
@@ -162,10 +162,10 @@ const HomePage = ({
             {/* Left Column: Text Content */}
             <div className="col-12 col-lg-6 mb-4">
               <div className="p-4 rounded" style={{ backgroundColor: "#ffe7d3" }}>
-                <h1 className="text-center fw-bold" style={{ color: "#D2691E", fontSize: "2rem" }}>
+                <h2 className="text-center" style={{ color: "#D2691E" }}>
                   Help stray animal
-                </h1>
-                <p className="fw-bold mt-4" style={{ color: "rgb(15, 100, 101)", fontSize: "1.2rem" }}>
+                </h2>
+                <p className="fw-bold mt-4" style={{ color: "rgb(15, 100, 101)" }}>
                   You can help us adopt an animal by visiting our website and browsing through the list
                   of animals in need of a loving home. Once you find your perfect companion, simply fill
                   out the adoption form with basic details to ensure a great match. Our team will guide

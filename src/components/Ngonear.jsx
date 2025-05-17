@@ -5,6 +5,7 @@ import { db } from "../firebase"; // Adjust path to Firebase config
 import { collection, getDocs } from "firebase/firestore"; // Firebase methods
 import { Container, Table, Button, Card } from "react-bootstrap";
 import axios from "../interceptors/axiosInterceptor";
+import Aboutus from "./About/Aboutus";
 
 const Ngonear = ({
   token,
@@ -55,7 +56,7 @@ const Ngonear = ({
       <Container className="ngo-container">
         <Card className="data-card">
           <Card.Header>
-            <h2 className="mb-0">NGOs Near You</h2>
+            <h2 className="mb-0">Ngos Near You</h2>
           </Card.Header>
           <Card.Body>
             <div className="table-responsive">
@@ -68,7 +69,7 @@ const Ngonear = ({
                     <th>Website</th>
                     <th>Rating</th>
                     <th>Location</th>
-                    <th>Action</th>
+                   {localStorage.getItem("userType") === 'admin' &&  <th>Action</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -90,9 +91,9 @@ const Ngonear = ({
                         {ngo.reviews ? `${ngo.reviews} ⭐` : 'No reviews'}
                       </td>
                       <td>{ngo.location}</td>
-                      <td>
+                      {localStorage.getItem("userType") === 'admin' && <td>
                         <Button className="action-btn">View Details</Button>
-                      </td>
+                      </td>}
                     </tr>
                   ))}
                 </tbody>
@@ -107,6 +108,7 @@ const Ngonear = ({
           </Card.Body>
         </Card>
       </Container>
+      <Aboutus/>
     </>
   );
 };

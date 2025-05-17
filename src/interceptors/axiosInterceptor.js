@@ -30,7 +30,7 @@ axiosInstance.interceptors.response.use(
     
     // Handle errors
     if (error.response) {
-      toast.error(error.response.data.message || 'Something went wrong!');
+      toast.error(error.response.data.error || 'Something went wrong!');
     } else {
       toast.error('Network error! Please check your connection.');
     }

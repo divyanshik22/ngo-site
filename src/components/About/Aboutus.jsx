@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useEffect } from 'react';
 import logo from "../../images/Logoo.png"; // Update path to your logo
 import "./Aboutus.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const Aboutus = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    // Scroll to top when component mounts or location changes
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }, [location]);
+
   return (
     <div
       className="container-fluid"
@@ -35,7 +45,7 @@ const Aboutus = () => {
         </div>
 
         {/* Center Section: Quick Links */}
-        <div className="col-md-3">
+        {localStorage.getItem("userType") === "user" && <div className="col-md-3">
           <h5>Quick Links</h5>
           <ul className="nav flex-column">
             <li className="nav-item mb-2">
@@ -64,7 +74,7 @@ const Aboutus = () => {
               </Link>
             </li>
           </ul>
-        </div>
+        </div>}
 
         {/* Right Section: Contact Information */}
         <div className="col-md-4">

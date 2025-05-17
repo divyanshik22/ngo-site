@@ -143,7 +143,7 @@ const Contactus = ({
 
         <Row className="justify-content-center">
           <Col md={6}>
-            <h2 style={{ color: '#0F6465', textAlign: "center" }}>Contact Us</h2>
+            <h2 style={{ color: '#0F6465', textAlign: "center" }}>Reach Out To Us</h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label htmlFor="name" className="form-label" style={{ color: '#0F6465' }}>

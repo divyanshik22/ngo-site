@@ -71,7 +71,7 @@ const HelpRequest = ({
                     <th>HelpFor</th>
                     <th>Status</th>
                     <th>Resolved</th>
-                    <th>Action</th>
+                    {localStorage.getItem("userType") === "admin" && <th>Action</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -92,14 +92,14 @@ const HelpRequest = ({
                               Resolved
                             </Button>
                         </td>
-                        <td>
+                        { localStorage.getItem("userType") === "admin" && <td>
                             <Button
                               className="action-btn"
                               // onClick={() => handleDeleterequest(request?.id)}
                             >
                               Delete
                             </Button>
-                        </td>
+                        </td>}
                       </tr>
                     ))}
                 </tbody>

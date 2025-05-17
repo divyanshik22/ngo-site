@@ -64,10 +64,8 @@ const Login = ({ show, handleClose, handleToken }) => {
           password: password,
         });
         // Handle successful login
-        console.log("Login successful:", response.data.data.role );
-        if(response.data.success === true){
-        
-
+        console.log("Login successful:", response.data.data.role,response,response.data.success );
+        if(response.data.success){
           handleToken([response.data.token , response.data.data.role,response.data.data.name]);
           toast.success("Logged In", {
             position: "top-center",
@@ -78,7 +76,6 @@ const Login = ({ show, handleClose, handleToken }) => {
             draggable: true,
             theme: "light",
           });
-          dispatch(login({ emailOrPhone, password }));
           handleClose();
           navigate("/");
         }
