@@ -45,8 +45,7 @@ const Aboutus = () => {
         </div>
 
         {/* Center Section: Quick Links */}
-        <p>hello</p>
-        {(localStorage.getItem("userType") === "user" || localStorage.getItem("userType") === "") && <div className="col-md-3">
+        {(localStorage.getItem("userType") === "admin" || localStorage.getItem("userType") === "volunteer") ? "" : <div className="col-md-3">
           <h5>Quick Links</h5>
           <ul className="nav flex-column">
             <li className="nav-item mb-2">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Carousel, Card, Row, Col, Container } from "react-bootstrap";
 import Navbar from "../Navbar/NavbarComponent";
 import Aboutus from "../About/Aboutus";
@@ -21,7 +21,7 @@ import CardImage1 from "../../images/CardImage1.jpeg";
 import CardImage2 from "../../images/CardImage2.jpeg";
 import CardImage3 from "../../images/CardImage3.jpeg";
 import CardImage4 from "../../images/CardImage4.jpeg";
-import { FaHandHoldingMedical, FaClinicMedical, FaRegAddressCard, FaHospital, FaHome, FaPaw } from 'react-icons/fa';
+import { FaHandHoldingMedical, FaClinicMedical, FaRegAddressCard, FaHospital, FaHome, FaPaw, FaHeart, FaUsers, FaHandshake, FaStar, FaDog, FaCat, FaPlay } from 'react-icons/fa';
 
 const HomePage = ({
   token,
@@ -31,6 +31,44 @@ const HomePage = ({
   username,
   handleLogout,
 }) => {
+  const [stats, setStats] = useState({
+    animalsRescued: 0,
+    volunteers: 0,
+    donations: 0,
+    happyAdoptions: 0
+  });
+
+  useEffect(() => {
+    // Animate stats counting up
+    const targetStats = {
+      animalsRescued: 5000,
+      volunteers: 1000,
+      donations: 2500,
+      happyAdoptions: 3000
+    };
+
+    const duration = 2000; // 2 seconds
+    const steps = 50;
+    const stepDuration = duration / steps;
+
+    let currentStep = 0;
+    const interval = setInterval(() => {
+      currentStep++;
+      const progress = currentStep / steps;
+
+      setStats({
+        animalsRescued: Math.floor(targetStats.animalsRescued * progress),
+        volunteers: Math.floor(targetStats.volunteers * progress),
+        donations: Math.floor(targetStats.donations * progress),
+        happyAdoptions: Math.floor(targetStats.happyAdoptions * progress)
+      });
+
+      if (currentStep === steps) clearInterval(interval);
+    }, stepDuration);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const customIcon = new Icon({
     iconUrl: require("../../images/pin-map.png"),
     iconSize: [38, 38],
@@ -121,12 +159,55 @@ const HomePage = ({
         username={username}
         handleLogout={handleLogout}
       />
-      <img
-        src={Animal}
-        alt="Logo"
-        style={{ width: "100%", height: "auto" }}
-        className="d-inline-block align-top"
-      />
+      <div className="hero-section">
+        <video
+          className="hero-video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+        >
+          <source src="https://assets.mixkit.co/videos/preview/mixkit-rescued-dog-being-cared-for-by-veterinarian-1486-large.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div className="hero-overlay"></div>
+        <div className="hero-content">
+          <h1 className="hero-title">Help Dogs in Need</h1>
+          <p className="hero-subtitle">Join us in rescuing and caring for stray dogs</p>
+          <div className="hero-buttons">
+            <button 
+              className="btn btn-primary hero-btn"
+              onClick={() => navigate("/donate")}
+            >
+              <FaHeart className="me-2" /> Donate Now
+            </button>
+            <button 
+              className="btn btn-outline-primary hero-btn"
+              onClick={() => navigate("/helpneeded")}
+            >
+              <FaPaw className="me-2" /> Help Dogs
+            </button>
+          </div>
+        </div>
+        <div className="floating-elements">
+          {[...Array(6)].map((_, i) => (
+            <div
+              key={i}
+              className="floating-element"
+              style={{
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
+                animationDelay: `${i * 0.5}s`,
+                transform: `rotate(${Math.random() * 360}deg)`,
+                backgroundImage: i % 2 === 0 
+                  ? 'url("data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%23D2691E\'><path d=\'M12 2C9.24 2 7 4.24 7 7c0 2.85 2.92 7.21 5 9.88 2.11-2.69 5-7 5-9.88 0-2.76-2.24-5-5-5zm0 7.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z\'/></svg>")'
+                  : 'url("data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%230F6465\'><path d=\'M12 2C9.24 2 7 4.24 7 7c0 2.85 2.92 7.21 5 9.88 2.11-2.69 5-7 5-9.88 0-2.76-2.24-5-5-5zm0 7.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z\'/></svg>")'
+              }}
+            />
+          ))}
+        </div>
+      </div>
       <div>
         <Container style={{ padding: "20px", textAlign: "center" }}>
           <h2 style={{ color: "#DC5705" }}>Why Should You Help Us</h2>
@@ -138,6 +219,43 @@ const HomePage = ({
             place.
           </p>
         </Container>
+        {/* New Statistics Section */}
+      <div className="stats-section py-5" style={{ backgroundColor: "#ffe7d3" }}>
+        <Container>
+          <h2 className="text-center mb-5" style={{ color: "#D2691E" }}>Our Impact in Numbers</h2>
+          <Row className="g-4">
+            <Col md={3} className="text-center">
+              <div className="stat-card">
+                <FaPaw className="stat-icon" style={{ color: "#D2691E", fontSize: "2.5rem" }} />
+                <h3 className="stat-number">{stats.animalsRescued}+</h3>
+                <p className="stat-label">Animals Rescued</p>
+              </div>
+            </Col>
+            <Col md={3} className="text-center">
+              <div className="stat-card">
+                <FaUsers className="stat-icon" style={{ color: "#D2691E", fontSize: "2.5rem" }} />
+                <h3 className="stat-number">{stats.volunteers}+</h3>
+                <p className="stat-label">Active Volunteers</p>
+              </div>
+            </Col>
+            <Col md={3} className="text-center">
+              <div className="stat-card">
+                <FaHandshake className="stat-icon" style={{ color: "#D2691E", fontSize: "2.5rem" }} />
+                <h3 className="stat-number">{stats.donations}+</h3>
+                <p className="stat-label">Donations Received</p>
+              </div>
+            </Col>
+            <Col md={3} className="text-center">
+              <div className="stat-card">
+                <FaHeart className="stat-icon" style={{ color: "#D2691E", fontSize: "2.5rem" }} />
+                <h3 className="stat-number">{stats.happyAdoptions}+</h3>
+                <p className="stat-label">Happy Adoptions</p>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+
         <Container>
           <div className="row g-4">
             {cardData.map((card, index) => (
@@ -325,7 +443,8 @@ const HomePage = ({
       </div>
       <Aboutus />
 
-
+      
+   
     </>
   );
 };
